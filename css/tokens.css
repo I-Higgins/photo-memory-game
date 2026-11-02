@@ -1,0 +1,116 @@
+/* Photo Pairs design tokens — copy to css/tokens.css */
+:root{
+  /* light (default) */
+  --bg:#F4EFE7; --surface:#FFFDF9; --surface-2:#EFE7DA;
+  --ink:#2A2521; --ink-2:#5E554D; --line:#D6CBBB;
+  --accent:#2D5F5D; --accent-press:#1F4644; --on-accent:#FFFFFF;
+  --card-back:#2D5F5D; --on-card:#F4EFE7;
+  --pick:#A86B14; --danger:#A3402F; --focus:#1F4644;
+  --scrim:rgba(42,37,33,.45);
+  --shadow-card:0 1px 0 rgba(42,37,33,.06),0 6px 18px rgba(42,37,33,.12);
+  --shadow-raised:0 10px 24px rgba(42,37,33,.18);
+  --shadow-dialog:0 24px 64px rgba(42,37,33,.30);
+  --card-border:0px solid transparent;
+
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text",
+    "Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --fs-small:17px; --fs-body:20px; --fs-button:22px;
+  --fs-title:28px; --fs-heading:34px;
+  --fs-caption-big:32px; --fs-display:40px;
+
+  --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px;
+  --space-5:20px; --space-6:24px; --space-7:32px; --space-8:40px;
+  --space-9:56px; --space-10:72px;
+  --radius-sm:12px; --radius-md:16px; --radius-card:18px;
+  --radius-lg:20px; --radius-xl:24px;
+  --tap-player:60px; --tap-main:72px; --tap-helper:48px;
+
+  --ease-out:cubic-bezier(.2,.7,.2,1);
+  --dur-press:200ms; --dur-fade:220ms; --dur-overlay:320ms;
+  --dur-flip:420ms; --dur-hint:1300ms; --hint-repeats:3;
+  --delay-match-moment:650ms; --dur-moment-auto:6000ms;
+  --dur-peek:5000ms; --hold-unlock:2000ms;
+  --hold-mismatch:2000ms; /* 1200 | 2000 | 3200 */
+}
+[data-theme="dark"]{
+  --bg:#1C1917; --surface:#282320; --surface-2:#332D29;
+  --ink:#F4EFE7; --ink-2:#C9BFB3; --line:#5A514A;
+  --accent:#7FBDB8; --accent-press:#9FD3CE; --on-accent:#10201F;
+  --card-back:#3F7471; --on-card:#F4EFE7;
+  --pick:#E6A94A; --danger:#F08C78; --focus:#F2C94C;
+  --scrim:rgba(0,0,0,.6);
+  --shadow-card:0 6px 18px rgba(0,0,0,.5);
+  --shadow-dialog:0 24px 64px rgba(0,0,0,.6);
+  --card-border:1px solid rgba(255,255,255,.08);
+}
+[data-theme="contrast"]{
+  --bg:#FFFFFF; --surface:#FFFFFF; --surface-2:#FFFFFF;
+  --ink:#000000; --ink-2:#1F1F1F; --line:#000000;
+  --accent:#003B3A; --accent-press:#000000; --on-accent:#FFFFFF;
+  --card-back:#003B3A; --on-card:#FFFFFF;
+  --pick:#7A3E00; --danger:#8A1C0C; --focus:#000000;
+  --scrim:rgba(0,0,0,.7);
+  --shadow-card:none; --shadow-dialog:none;
+  --card-border:3px solid #000000;
+}
+[data-text="large"]{
+  --fs-small:20px; --fs-body:24px; --fs-button:26px;
+  --fs-title:34px; --fs-heading:41px;
+  --fs-caption-big:38px; --fs-display:48px;
+}
+[data-text="xl"]{
+  --fs-small:24px; --fs-body:28px; --fs-button:31px;
+  --fs-title:39px; --fs-heading:48px;
+  --fs-caption-big:45px; --fs-display:56px;
+}
+@media (prefers-reduced-motion:reduce){
+  :root{ --dur-flip:0ms; --dur-hint:0ms; }
+}
+/* also add class "reduce-motion" on <html> when the
+   media query matches, so JS timers can check one flag */
+
+/* ------------------------------------------------------------------
+   Additional tokens: colours the design boards use that tokens.css
+   didn't name. Values are copied from the boards (Settings, Main,
+   HelperAlbums, HelperAlbum, Pieces); no new colours were invented.
+   ------------------------------------------------------------------ */
+:root{
+  --control-off:#8E8377;      /* switch "off" track, text-input border */
+  --track:#E3D9CA;            /* progress-bar and unlock-ring track */
+  --auto-bar:#8FA9A7;         /* match-moment "carries on" bar */
+  --chip-bg:#DCE8E6;          /* "Played last time", install steps */
+  --chip-ink:#1F4644;
+  --row-bg:#F7F2EA;           /* helper album rows */
+  --placeholder-bg:#E7DCCB;   /* album with no cover */
+  --placeholder-dot:#DDD0BC;
+  --placeholder-line:#B9A88F;
+  --pending-bg:#EAE1D3;       /* photo tile while adding */
+  --caption-missing:#6B6158;  /* italic "Add a caption" */
+  --danger-soft:#F7E6E2;      /* inline "remove photo?" check */
+  --heart:#C7861F;            /* app mark heart */
+  --input-bg:#FFFFFF;
+  --link:#1F4644;
+  --moment-scrim:rgba(244,239,231,.97);
+  --howto-scrim:rgba(42,37,33,.55);
+  --panel-line:transparent;
+  --border-w:2px;             /* quiet-button border */
+}
+[data-theme="dark"]{
+  --control-off:#8A8076;
+  --track:#4A423C; --auto-bar:#5F8F8B;
+  --chip-bg:#2F4A48; --chip-ink:#CFE7E4;
+  --row-bg:#2E2925; --placeholder-bg:#3A332E; --placeholder-dot:#453D37; --placeholder-line:#8A7D6C;
+  --pending-bg:#3A332E; --caption-missing:#B3A89C; --danger-soft:#4A2C26;
+  --heart:#E6A94A; --input-bg:#1C1917; --link:#9FD3CE;
+  --moment-scrim:rgba(28,25,23,.97); --howto-scrim:rgba(0,0,0,.7);
+}
+[data-theme="contrast"]{
+  --control-off:#4D4D4D;
+  --track:#BDBDBD; --auto-bar:#003B3A;
+  --chip-bg:#FFFFFF; --chip-ink:#000000;
+  --row-bg:#FFFFFF; --placeholder-bg:#FFFFFF; --placeholder-dot:#D0D0D0; --placeholder-line:#000000;
+  --pending-bg:#E6E6E6; --caption-missing:#1F1F1F; --danger-soft:#FFFFFF;
+  --heart:#7A3E00; --input-bg:#FFFFFF; --link:#003B3A;
+  --moment-scrim:rgba(255,255,255,.98); --howto-scrim:rgba(0,0,0,.75);
+  --panel-line:#000000; --border-w:3px;
+}
