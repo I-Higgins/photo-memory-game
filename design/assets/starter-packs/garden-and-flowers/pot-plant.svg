@@ -1,0 +1,3 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+<rect width="100" height="100" rx="16" fill="#F6E3E6"></rect><g fill="#5F8B57"><ellipse cx="50" cy="34" rx="7" ry="20"></ellipse><ellipse cx="36" cy="42" rx="6" ry="16" transform="rotate(-30 36 42)"></ellipse><ellipse cx="64" cy="42" rx="6" ry="16" transform="rotate(30 64 42)"></ellipse></g><path d="M32 60h36l-5 26H37z" fill="#C9763E"></path><rect x="29" y="56" width="42" height="8" rx="2" fill="#B5652F"></rect>
+</svg>

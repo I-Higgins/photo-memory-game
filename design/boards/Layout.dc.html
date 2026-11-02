@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<title>Layout and card grids</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#FFFDF9}
+.lbl{margin:0;font-size:15px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#5E554D}
+table{border-collapse:collapse;width:100%}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid #E3D9CA;font-size:16px}
+th{font-size:13px;color:#5E554D;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+</style>
+</helmet>
+<div style="width: 1280px; height: 2400px; background: #FFFDF9; color: #2A2521; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; padding: 56px; box-sizing: border-box; display: flex; flex-direction: column; gap: 36px">
+<header>
+<h1 style="margin: 0; font-size: 40px; line-height: 48px">Layout &amp; card grids</h1>
+<p style="margin: 6px 0 0; font-size: 18px; line-height: 27px; color: #5E554D; max-width: 940px">Cards are always as big as the space allows. Pick columns × rows from the table, split the free area into equal cells, then fit the card in its cell with its shape kept between 4:5 and 5:4. Measure the real viewport; don’t detect devices.</p>
+</header>
+
+<section style="display: flex; flex-direction: column; gap: 14px">
+<h2 class="lbl">Grid table · columns × rows → card size (px)</h2>
+<table>
+<thead><tr><th>Cards</th><th>iPad landscape · 1180 × 820</th><th>iPad portrait · 820 × 1180</th><th>iPhone portrait · 390 × 844</th><th>Gap</th></tr></thead>
+<tbody>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="4"><tr><td style="font-weight: 700">{{r.cards}}</td><td>{{r.l}}</td><td>{{r.p}}</td><td>{{r.ph}}</td><td>{{r.gap}}</td></tr></sc-for>
+</tbody>
+</table>
+</section>
+
+<section style="display: flex; flex-direction: column; gap: 14px">
+<h2 class="lbl">The same grids, drawn to scale (iPad 20%, iPhone 30%)</h2>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px">
+<sc-for list="{{diagrams}}" as="d" hint-placeholder-count="12">
+<div style="display: flex; flex-direction: column; gap: 8px; align-items: flex-start">
+<div style="position: relative; width: {{d.fw}}px; height: {{d.fh}}px; background: #F4EFE7; border-radius: 10px; box-shadow: inset 0 0 0 1px #D6CBBB">
+<div style="position: absolute; left: 0; right: 0; top: 0; height: {{d.bar}}px; border-bottom: 1px dashed #B9A88F"></div>
+<sc-if value="{{d.phone}}" hint-placeholder-val="{{ false }}"><div style="position: absolute; left: 0; right: 0; bottom: 0; height: {{d.bottom}}px; border-top: 1px dashed #B9A88F"></div></sc-if>
+<div style="position: absolute; left: {{d.ax}}px; top: {{d.ay}}px; width: {{d.aw}}px; height: {{d.ah}}px; display: flex; align-items: center; justify-content: center">
+<div style="display: grid; grid-template-columns: repeat({{d.cols}}, {{d.cw}}px); gap: {{d.g}}px">
+<sc-for list="{{d.cells}}" as="k" hint-placeholder-count="12"><span style="display: block; width: {{d.cw}}px; height: {{d.ch}}px; background: #2D5F5D; border-radius: 3px"></span></sc-for>
+</div>
+</div>
+</div>
+<span style="font-size: 14px; color: #5E554D">{{d.label}}</span>
+</div>
+</sc-for>
+</div>
+</section>
+
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; align-items: start">
+<section style="display: flex; flex-direction: column; gap: 14px">
+<h2 class="lbl">Card size calculation</h2>
+<pre style="margin: 0; background: #2A2521; color: #F4EFE7; border-radius: 16px; padding: 24px; font-size: 14px; line-height: 21px; white-space: pre-wrap">{{formula}}</pre>
+</section>
+<section style="display: flex; flex-direction: column; gap: 14px">
+<h2 class="lbl">Breakpoints, chrome and safe areas</h2>
+<table>
+<tbody>
+<sc-for list="{{rules}}" as="r" hint-placeholder-count="8"><tr><td style="width: 190px; font-weight: 600; vertical-align: top">{{r.k}}</td><td style="line-height: 23px">{{r.v}}</td></tr></sc-for>
+</tbody>
+</table>
+</section>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":2400}}'>
+var GRIDS = {
+  land: { 6: [3, 2], 12: [4, 3], 16: [4, 4], 20: [5, 4] },
+  port: { 6: [2, 3], 12: [3, 4], 16: [4, 4], 20: [4, 5] },
+  phone: { 6: [2, 3], 12: [3, 4], 16: [4, 4], 20: [4, 5] }
+};
+var DEV = {
+  land: { w: 1180, h: 820, pad: 40, top: 120, bottom: 24, bar: 108, bot: 0 },
+  port: { w: 820, h: 1180, pad: 32, top: 120, bottom: 32, bar: 108, bot: 0 },
+  phone: { w: 390, h: 844, pad: 16, top: 131, bottom: 114, bar: 115, bot: 98 }
+};
+function fit(dev, n) {
+  var d = DEV[dev], g = GRIDS[dev][n];
+  var gap = dev === 'phone' ? 10 : (n <= 12 ? 20 : 16);
+  var aw = d.w - 2 * d.pad, ah = d.h - d.top - d.bottom;
+  var cw = (aw - (g[0] - 1) * gap) / g[0], ch = (ah - (g[1] - 1) * gap) / g[1];
+  return { cols: g[0], rows: g[1], gap: gap, w: Math.floor(Math.min(cw, ch * 1.25)), h: Math.floor(Math.min(ch, cw * 1.25)), aw: aw, ah: ah };
+}
+var FORMULA = [
+'// area = viewport minus safe areas, side padding,',
+'//        top bar and (iPhone) bottom control bar',
+'const [cols, rows] = GRID[orientation][cardCount];',
+'const gap = isPhone ? 10 : cardCount <= 12 ? 20 : 16;',
+'',
+'const cellW = (areaW - (cols - 1) * gap) / cols;',
+'const cellH = (areaH - (rows - 1) * gap) / rows;',
+'',
+'// keep the card between 4:5 and 5:4',
+'const cardW = Math.floor(Math.min(cellW, cellH * 1.25));',
+'const cardH = Math.floor(Math.min(cellH, cellW * 1.25));',
+'',
+'// centre the grid in the area; recompute on',
+'// resize / orientationchange (debounce 100ms)',
+'grid.style.gridTemplateColumns =',
+'  `repeat(${cols}, ${cardW}px)`;',
+'',
+'// photo on the card: object-fit: cover;',
+'// object-position: center; inset 8px (5px on iPhone)',
+'// match moment: object-fit: contain, never cropped,',
+'// max 76% of width and 61% of height'
+].join('\n');
+var RULES = [
+  ['Orientation', 'Landscape when width > height. Use the landscape table.'],
+  ['Phone rules', 'When the shorter side is under 600 px. In landscape, the phone uses the iPad landscape table with a 10 px gap and the controls in the top bar.'],
+  ['Top bar', 'iPad: 24 px from the top safe area, 60 px controls, 12–24 px clear space before the cards (cards start at 120). iPhone: 52 px bar.'],
+  ['Controls', 'Back on the left. Hint and Restart on the right (iPad) or in a bottom bar (iPhone), at least 12 px from the nearest card.'],
+  ['Safe areas', 'viewport-fit=cover. Add env(safe-area-inset-*) to the page padding on all four sides. iPhone bottom bar sits above the home indicator (34 px).'],
+  ['Side padding', '40 px iPad landscape, 32 px iPad portrait, 16 px iPhone, plus the safe area.'],
+  ['Text size', 'Card sizes never change with text size. At Extra large, top-bar labels may wrap to two lines; the bar grows and the card area shrinks.'],
+  ['Scrolling', 'The game screen never scrolls. Home, helper and settings scroll vertically when they need to.']
+];
+class Component extends DCLogic {
+  renderVals() {
+    var counts = [6, 12, 16, 20];
+    var rows = counts.map(function (n) {
+      var a = fit('land', n), b = fit('port', n), c = fit('phone', n);
+      return { cards: n + ' (' + n / 2 + ' pairs)', l: a.cols + ' × ' + a.rows + '  →  ' + a.w + ' × ' + a.h, p: b.cols + ' × ' + b.rows + '  →  ' + b.w + ' × ' + b.h, ph: c.cols + ' × ' + c.rows + '  →  ' + c.w + ' × ' + c.h, gap: (n <= 12 ? '20' : '16') + ' / 10 phone' };
+    });
+    var diagrams = [];
+    counts.forEach(function (n) {
+      ['land', 'port', 'phone'].forEach(function (dev) {
+        var s = dev === 'phone' ? 0.3 : 0.2, d = DEV[dev], f = fit(dev, n);
+        var cells = []; for (var i = 0; i < n; i++) cells.push(i);
+        diagrams.push({ fw: Math.round(d.w * s), fh: Math.round(d.h * s), bar: Math.round(d.bar * s), phone: dev === 'phone', bottom: Math.round(d.bot * s),
+          ax: Math.round(d.pad * s), ay: Math.round(d.top * s), aw: Math.round(f.aw * s), ah: Math.round(f.ah * s),
+          cols: f.cols, cw: Math.max(2, Math.round(f.w * s)), ch: Math.max(2, Math.round(f.h * s)), g: Math.max(1, Math.round(f.gap * s)), cells: cells,
+          label: (dev === 'land' ? 'iPad landscape' : dev === 'port' ? 'iPad portrait' : 'iPhone') + ' · ' + n + ' cards' });
+      });
+    });
+    return { rows: rows, diagrams: diagrams, formula: FORMULA, rules: RULES.map(function (r) { return { k: r[0], v: r[1] }; }) };
+  }
+}
+</script>
+</body>
+</html>

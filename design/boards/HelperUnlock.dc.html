@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<title>Family helper – unlock</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#F4EFE7}
+a{color:#2D5F5D}a:hover{color:#1F4644}
+.btn{font:inherit;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;box-sizing:border-box;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.btn:focus-visible{outline:4px solid #1F4644;outline-offset:4px}
+.btn-quiet{background:#FFFDF9;color:#2A2521;border:2px solid #D6CBBB}
+.btn-primary{background:#2D5F5D;color:#FFFFFF;border:2px solid #2D5F5D}
+.key{font:inherit;cursor:pointer;width:96px;height:80px;border-radius:20px;background:#FFFDF9;border:2px solid #D6CBBB;font-size:34px;font-weight:600;color:#2A2521}
+.key:active{background:#EFE7DA}
+.link{font:inherit;cursor:pointer;background:none;border:0;color:#1F4644;font-size:19px;font-weight:600;text-decoration:underline;padding:12px}
+</style>
+</helmet>
+<div style="width: 1180px; height: 820px; background: #F4EFE7; color: #2A2521; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; padding: 24px 40px; box-sizing: border-box; position: relative">
+<a href="Home.dc.html" class="btn btn-quiet" style="height: 60px; padding: 0 26px 0 16px; border-radius: 16px; font-size: 22px; font-weight: 600"><svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"></path></svg><span>Back to albums</span></a>
+
+<div style="position: absolute; left: 0; right: 0; top: 110px; display: flex; flex-direction: column; align-items: center; gap: 10px">
+<h1 style="margin: 0; font-size: 36px; line-height: 44px; font-weight: 700">Family helper</h1>
+<p style="margin: 0; font-size: 21px; line-height: 28px; color: #5E554D; text-align: center; max-width: 620px">Add photos, write captions and change settings. Kept separate so nothing gets deleted by accident.</p>
+
+<sc-if value="{{isHold}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 18px; margin-top: 36px">
+<button type="button" class="btn" aria-label="Press and hold for 2 seconds to open the helper area" onPointerDown="{{holdStart}}" onPointerUp="{{holdEnd}}" onPointerLeave="{{holdEnd}}" onPointerCancel="{{holdEnd}}" onContextMenu="{{noMenu}}" style="position: relative; width: 240px; height: 240px; border-radius: 120px; border: 0; background: #FFFDF9; box-shadow: 0 8px 28px rgba(42,37,33,.14); flex-direction: column; gap: 8px; padding: 0; touch-action: none">
+<svg aria-hidden="true" width="240" height="240" viewBox="0 0 240 240" style="position: absolute; inset: 0"><circle cx="120" cy="120" r="108" fill="none" stroke="#E3D9CA" stroke-width="12"></circle><circle cx="120" cy="120" r="108" fill="none" stroke="#2D5F5D" stroke-width="12" stroke-linecap="round" stroke-dasharray="678.6" stroke-dashoffset="{{dash}}" transform="rotate(-90 120 120)"></circle></svg>
+<svg aria-hidden="true" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#2D5F5D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="{{lockPath}}"></path></svg>
+<span style="font-size: 22px; font-weight: 700; color: #2A2521; position: relative">{{holdLabel}}</span>
+</button>
+<p role="status" style="margin: 0; font-size: 20px; color: #5E554D; height: 28px">{{holdMsg}}</p>
+</div>
+</sc-if>
+
+<sc-if value="{{isCode}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 18px; margin-top: 24px">
+<div aria-label="{{codeAria}}" role="status" style="display: flex; gap: 18px; height: 28px; align-items: center">
+<sc-for list="{{dots}}" as="d" hint-placeholder-count="4"><span style="width: 22px; height: 22px; border-radius: 11px; border: 3px solid #2D5F5D; background: {{d.bg}}; box-sizing: border-box"></span></sc-for>
+</div>
+<p style="margin: 0; font-size: 19px; color: #5E554D; height: 26px">{{codeMsg}}</p>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px">
+<sc-for list="{{keys}}" as="k" hint-placeholder-count="12">
+<sc-if value="{{k.real}}" hint-placeholder-val="{{ true }}"><button type="button" class="key" aria-label="{{k.aria}}" onClick="{{k.press}}">{{k.label}}</button></sc-if>
+<sc-if value="{{k.blank}}" hint-placeholder-val="{{ false }}"><span></span></sc-if>
+</sc-for>
+</div>
+<button type="button" class="link" onClick="{{forgot}}">Forgot the code?</button>
+</div>
+</sc-if>
+
+<sc-if value="{{unlocked}}" hint-placeholder-val="{{ false }}">
+<a href="HelperAlbums.dc.html" class="btn btn-primary" style="height: 72px; padding: 0 40px; border-radius: 20px; font-size: 24px; font-weight: 700; margin-top: 8px">Open the helper area</a>
+</sc-if>
+</div>
+
+<sc-if value="{{showForgot}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; background: rgba(42,37,33,.45); display: flex; align-items: center; justify-content: center">
+<div role="dialog" aria-modal="true" aria-labelledby="fg" style="width: 600px; background: #FFFDF9; border-radius: 24px; padding: 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 14px">
+<h2 id="fg" style="margin: 0; font-size: 30px; line-height: 38px">Forgot the code?</h2>
+<p style="margin: 0; font-size: 21px; line-height: 30px; color: #5E554D">Press and hold the lock for 10 seconds instead. That opens the helper area and turns the code off, so you can set a new one in Settings. Your photos stay safe.</p>
+<button type="button" class="btn btn-primary" onClick="{{closeForgot}}" style="height: 64px; border-radius: 18px; font-size: 22px; font-weight: 700; margin-top: 10px">OK</button>
+</div>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"method":{"editor":"enum","options":["Press and hold","4-digit code"],"default":"Press and hold"},"$preview":{"width":1180,"height":820}}'>
+var CIRC = 678.6, HOLD_MS = 2000, CODE = '1234';
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { prog: 0, holdMsg: '', unlocked: false, code: '', codeMsg: 'Enter the 4-digit code (try 1234)', showForgot: false }; }
+  componentWillUnmount() { clearInterval(this.iv); }
+  componentDidUpdate(prev) { if (prev.method !== this.props.method) { clearInterval(this.iv); this.setState({ prog: 0, unlocked: false, code: '', holdMsg: '' }); } }
+  holdStart(e) {
+    if (this.state.unlocked) return;
+    var self = this, t0 = Date.now();
+    clearInterval(this.iv);
+    this.setState({ holdMsg: 'Keep holding…' });
+    this.iv = setInterval(function () {
+      var p = Math.min(1, (Date.now() - t0) / HOLD_MS);
+      self.setState({ prog: p });
+      if (p >= 1) { clearInterval(self.iv); self.setState({ unlocked: true, holdMsg: 'Unlocked' }); }
+    }, 30);
+  }
+  holdEnd() {
+    if (this.state.unlocked) return;
+    clearInterval(this.iv);
+    if (this.state.prog > 0) this.setState({ prog: 0, holdMsg: 'Keep holding until the circle is full' });
+  }
+  press(k) {
+    if (this.state.unlocked) return;
+    var c = this.state.code;
+    if (k === 'del') { this.setState({ code: c.slice(0, -1), codeMsg: '' }); return; }
+    if (c.length >= 4) return;
+    c += k;
+    if (c.length < 4) { this.setState({ code: c }); return; }
+    if (c === CODE) this.setState({ code: c, unlocked: true, codeMsg: 'Unlocked' });
+    else { var self = this; this.setState({ code: c, codeMsg: 'That code didn’t work. Try again.' }); setTimeout(function () { self.setState({ code: '' }); }, 700); }
+  }
+  renderVals() {
+    var s = this.state, self = this, isCode = this.props.method === '4-digit code';
+    var keys = ['1','2','3','4','5','6','7','8','9','','0','del'].map(function (k) {
+      return { real: k !== '', blank: k === '', label: k === 'del' ? '⌫' : k, aria: k === 'del' ? 'Delete' : k, press: function () { self.press(k); } };
+    });
+    var dots = [0, 1, 2, 3].map(function (i) { return { bg: i < s.code.length ? '#2D5F5D' : 'transparent' }; });
+    return {
+      isHold: !isCode, isCode: isCode, unlocked: s.unlocked,
+      dash: (CIRC * (1 - s.prog)).toFixed(1),
+      lockPath: s.unlocked ? 'M8 11V8a4 4 0 0 1 7.5-2' : 'M8 11V8a4 4 0 0 1 8 0v3',
+      holdLabel: s.unlocked ? 'Unlocked' : 'Press and hold',
+      holdMsg: s.holdMsg || 'Hold for 2 seconds',
+      dots: dots, keys: keys, codeMsg: s.codeMsg, codeAria: s.code.length + ' of 4 digits entered',
+      showForgot: s.showForgot,
+      holdStart: function (e) { self.holdStart(e); },
+      holdEnd: function () { self.holdEnd(); },
+      noMenu: function (e) { if (e && e.preventDefault) e.preventDefault(); },
+      forgot: function () { self.setState({ showForgot: true }); },
+      closeForgot: function () { self.setState({ showForgot: false }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

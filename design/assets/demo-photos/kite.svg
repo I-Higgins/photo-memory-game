@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 900" width="600" height="900">
+<defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6FB1D6"/><stop offset="1" stop-color="#D6ECF4"/></linearGradient></defs>
+<rect width="600" height="900" fill="url(#sky)"/>
+<ellipse cx="140" cy="200" rx="90" ry="34" fill="#FFFFFF" opacity=".8"/><ellipse cx="470" cy="330" rx="80" ry="28" fill="#FFFFFF" opacity=".7"/>
+<path d="M330 120 L 430 230 L 330 380 L 230 230 Z" fill="#E59E2E"/>
+<path d="M330 120 L 430 230 L 330 230 Z M230 230 L 330 230 L 330 380 Z" fill="#C0453E"/>
+<path d="M330 380 C 300 450 360 500 320 570 C 290 620 330 660 300 720" stroke="#2A2521" stroke-width="3" fill="none"/>
+<g fill="#2D5F5D"><path d="M318 450 l 24 -8 l -6 20 z"/><path d="M322 540 l 24 -8 l -6 20 z"/><path d="M306 630 l 24 -8 l -6 20 z"/></g>
+<path d="M0 760 C 150 720 400 730 600 750 V 900 H0 Z" fill="#8DB46E"/>
+<path d="M330 380 L 250 800" stroke="#5E554D" stroke-width="2"/>
+<circle cx="250" cy="790" r="14" fill="#2A2521"/>
+<path d="M240 805 H 260 L 266 860 H 234 Z" fill="#3D6E9E"/>
+</svg>

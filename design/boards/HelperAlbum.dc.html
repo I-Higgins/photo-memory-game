@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<title>Family helper – album photos</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#F4EFE7}
+a{color:#2D5F5D}a:hover{color:#1F4644}
+.btn{font:inherit;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;box-sizing:border-box}
+.btn:focus-visible,.tileb:focus-visible,input:focus-visible{outline:4px solid #1F4644;outline-offset:3px}
+.btn-quiet{background:#FFFDF9;color:#2A2521;border:2px solid #D6CBBB}
+.btn-primary{background:#2D5F5D;color:#FFFFFF;border:2px solid #2D5F5D}
+.btn-danger{background:#A3402F;color:#FFFFFF;border:2px solid #A3402F}
+.btn-danger-quiet{background:#FFFDF9;color:#A3402F;border:2px solid #D6CBBB}
+.tileb{font:inherit;cursor:pointer;text-align:left;border:0;padding:0;background:#FFFDF9;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 1px 0 rgba(42,37,33,.06),0 4px 12px rgba(42,37,33,.08);color:#2A2521}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spin{animation:spin 1s linear infinite}
+@media (prefers-reduced-motion: reduce){.spin{animation:none}}
+</style>
+</helmet>
+<div style="width: 1180px; height: 820px; position: relative; background: #F4EFE7; color: #2A2521; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; padding: 24px 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px; overflow: hidden">
+<header style="display: flex; align-items: center; justify-content: space-between; gap: 20px">
+<a href="HelperAlbums.dc.html" class="btn btn-quiet" style="height: 56px; padding: 0 22px 0 14px; border-radius: 16px; font-size: 20px; font-weight: 600"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"></path></svg>Albums</a>
+<div style="flex: 1; text-align: center"><h1 style="margin: 0; font-size: 30px; line-height: 36px">Family favourites</h1><p style="margin: 0; font-size: 18px; color: #5E554D">{{countLine}}</p></div>
+<button type="button" class="btn btn-primary" onClick="{{addPhotos}}" style="height: 56px; padding: 0 24px 0 18px; border-radius: 16px; font-size: 20px; font-weight: 700"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>Add photos</button>
+</header>
+
+<sc-if value="{{adding}}" hint-placeholder-val="{{ false }}">
+<div role="status" style="background: #FFFDF9; border-radius: 18px; padding: 18px 24px; display: flex; align-items: center; gap: 20px">
+<svg class="spin" aria-hidden="true" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#2D5F5D" stroke-width="2.6" stroke-linecap="round"><path d="M12 3a9 9 0 1 1-9 9"></path></svg>
+<div style="flex: 1">
+<div style="font-size: 21px; font-weight: 700">Adding {{addDone}} of {{addTotal}} photos…</div>
+<div style="font-size: 17px; color: #5E554D">Making them smaller so they load quickly. Please keep this screen open.</div>
+<div aria-hidden="true" style="margin-top: 10px; height: 10px; border-radius: 5px; background: #E3D9CA; overflow: hidden"><div style="height: 10px; width: {{addPct}}%; background: #2D5F5D; transition: width 300ms linear"></div></div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{empty}}" hint-placeholder-val="{{ false }}">
+<div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center">
+<svg aria-hidden="true" width="180" height="150" viewBox="0 0 120 104"><rect x="14" y="14" width="60" height="74" rx="8" fill="#FFFDF9" stroke="#B9A88F" stroke-width="3" transform="rotate(-8 44 51)"></rect><rect x="46" y="10" width="60" height="74" rx="8" fill="#FFFDF9" stroke="#B9A88F" stroke-width="3" stroke-dasharray="6 5" transform="rotate(7 76 47)"></rect><path d="M76 38v20M66 48h20" stroke="#2D5F5D" stroke-width="4" stroke-linecap="round"></path></svg>
+<h2 style="margin: 0; font-size: 30px">No photos in this album yet</h2>
+<p style="margin: 0; font-size: 20px; line-height: 28px; color: #5E554D; max-width: 560px">Pick photos from this iPad’s photo library. 6 or more works best, so there are enough for a game.</p>
+<button type="button" class="btn btn-primary" onClick="{{addPhotos}}" style="height: 68px; padding: 0 36px; border-radius: 20px; font-size: 22px; font-weight: 700; margin-top: 8px">Add photos</button>
+</div>
+</sc-if>
+
+<sc-if value="{{hasGrid}}" hint-placeholder-val="{{ true }}">
+<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 20px; max-height: 556px; overflow-y: auto; align-content: start; padding: 4px; margin: -4px">
+<sc-for list="{{photos}}" as="p" hint-placeholder-count="10">
+<sc-if value="{{p.ready}}" hint-placeholder-val="{{ true }}">
+<button type="button" class="tileb" onClick="{{p.edit}}" aria-label="{{p.aria}}">
+<span style="position: relative; display: block"><img src="{{p.src}}" alt="" style="display: block; width: 100%; height: 150px; object-fit: cover">
+<sc-if value="{{p.isCover}}" hint-placeholder-val="{{ false }}"><span style="position: absolute; left: 8px; top: 8px; background: #2A2521; color: #FFFDF9; font-size: 15px; font-weight: 700; padding: 4px 10px; border-radius: 8px">Cover</span></sc-if>
+</span>
+<span style="display: block; padding: 10px 12px 12px; min-height: 52px; box-sizing: border-box; font-size: 17px; line-height: 22px; color: {{p.capColor}}; font-style: {{p.capStyle}}">{{p.cap}}</span>
+</button>
+</sc-if>
+<sc-if value="{{p.pending}}" hint-placeholder-val="{{ false }}">
+<div style="height: 202px; border-radius: 16px; background: #EAE1D3; display: flex; align-items: center; justify-content: center"><svg class="spin" aria-hidden="true" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#8E8377" stroke-width="2.6" stroke-linecap="round"><path d="M12 3a9 9 0 1 1-9 9"></path></svg></div>
+</sc-if>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{editing}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; background: rgba(42,37,33,.45); display: flex; align-items: center; justify-content: center">
+<div role="dialog" aria-modal="true" aria-labelledby="ce" style="width: 900px; background: #FFFDF9; border-radius: 24px; padding: 32px; box-sizing: border-box; display: flex; gap: 28px">
+<div style="width: 400px; height: 420px; flex: none; background: #F4EFE7; border-radius: 16px; display: flex; align-items: center; justify-content: center"><img src="{{cur.src}}" alt="" style="max-width: 380px; max-height: 400px; width: auto; height: auto; display: block; border-radius: 6px"></div>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 12px">
+<h2 id="ce" style="margin: 0; font-size: 28px">Photo details</h2>
+<label for="cap" style="font-size: 19px; font-weight: 600">Caption</label>
+<input id="cap" type="text" value="{{draft}}" onChange="{{typeCap}}" placeholder="Where and when? e.g. Mooloolaba, 2019" maxlength="60" style="font: inherit; font-size: 22px; height: 62px; padding: 0 16px; border-radius: 14px; border: 2px solid #8E8377; background: #FFFFFF; color: #2A2521">
+<p style="margin: 0; font-size: 16px; color: #5E554D">Short is best. It’s shown large under the photo when a pair is found.</p>
+<div style="display: flex; gap: 12px; margin-top: 6px">
+<button type="button" class="btn btn-quiet" onClick="{{makeCover}}" style="flex: 1; height: 54px; border-radius: 14px; font-size: 18px; font-weight: 600">{{coverLabel}}</button>
+<button type="button" class="btn btn-danger-quiet" onClick="{{askRemove}}" style="flex: 1; height: 54px; border-radius: 14px; font-size: 18px; font-weight: 600">Remove photo</button>
+</div>
+<sc-if value="{{confirmRemove}}" hint-placeholder-val="{{ false }}">
+<div role="alert" style="background: #F7E6E2; border-radius: 14px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 18px; line-height: 25px">Remove this photo from the album? It’s deleted from this app only, not from the iPad’s photo library.</span>
+<div style="display: flex; gap: 10px"><button type="button" class="btn btn-quiet" onClick="{{cancelRemove}}" style="flex: 1; height: 50px; border-radius: 12px; font-size: 17px; font-weight: 600">Keep it</button><button type="button" class="btn btn-danger" onClick="{{doRemove}}" style="flex: 1; height: 50px; border-radius: 12px; font-size: 17px; font-weight: 700">Remove</button></div>
+</div>
+</sc-if>
+<div style="flex: 1"></div>
+<div style="display: flex; gap: 12px">
+<button type="button" class="btn btn-quiet" onClick="{{closeEdit}}" style="flex: 1; height: 62px; border-radius: 16px; font-size: 20px; font-weight: 600">Cancel</button>
+<button type="button" class="btn btn-primary" onClick="{{saveEdit}}" style="flex: 1; height: 62px; border-radius: 16px; font-size: 20px; font-weight: 700">Save</button>
+</div>
+</div>
+</div>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"view":{"editor":"enum","options":["Photos","Empty","Adding photos"],"default":"Photos"},"$preview":{"width":1180,"height":820}}'>
+var START = [
+  ['../assets/demo-photos/beach.svg', 'Mooloolaba, summer 2019'], ['../assets/demo-photos/boat.svg', 'Out on the bay at sunset'],
+  ['../assets/demo-photos/fish.svg', 'Dad’s first big snapper'], ['../assets/demo-photos/dog.svg', 'Biscuit, aged two'],
+  ['../assets/demo-photos/ute.svg', ''], ['../assets/demo-photos/roses.svg', 'Mum’s roses by the back fence'],
+  ['../assets/demo-photos/lighthouse.svg', 'The lighthouse walk'], ['../assets/demo-photos/cake.svg', ''],
+  ['../assets/demo-photos/caravan.svg', 'Camping at the national park'], ['../assets/demo-photos/kite.svg', 'Flying kites on the headland']
+];
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = this.fresh(p.view || 'Photos'); }
+  fresh(view) {
+    var photos = view === 'Empty' ? [] : START.map(function (x) { return { src: x[0], cap: x[1], ready: true }; });
+    if (view === 'Adding photos') photos = photos.slice(0, 4).concat(START.slice(4).map(function (x) { return { src: x[0], cap: '', ready: false }; }));
+    return { photos: photos, cover: 0, edit: -1, draft: '', confirmRemove: false, adding: view === 'Adding photos', addDone: view === 'Adding photos' ? 0 : 0, addTotal: 6 };
+  }
+  componentDidMount() { if (this.state.adding) this.runAdd(); }
+  componentWillUnmount() { clearInterval(this.iv); }
+  componentDidUpdate(prev) { if (prev.view !== this.props.view) { clearInterval(this.iv); this.setState(this.fresh(this.props.view || 'Photos')); var self = this; setTimeout(function () { if (self.state.adding) self.runAdd(); }, 0); } }
+  runAdd() {
+    var self = this;
+    clearInterval(this.iv);
+    this.iv = setInterval(function () {
+      var s = self.state, list = s.photos.slice(), i = list.findIndex(function (p) { return !p.ready; });
+      if (i < 0) { clearInterval(self.iv); self.setState({ adding: false }); return; }
+      list[i] = Object.assign({}, list[i], { ready: true });
+      self.setState({ photos: list, addDone: s.addDone + 1 });
+    }, 900);
+  }
+  renderVals() {
+    var s = this.state, self = this;
+    var photos = s.photos.map(function (p, i) {
+      return { src: p.src, ready: p.ready, pending: !p.ready, isCover: i === s.cover, cap: p.cap || 'Add a caption', capColor: p.cap ? '#2A2521' : '#6B6158', capStyle: p.cap ? 'normal' : 'italic',
+        aria: (p.cap || 'Photo with no caption') + '. Tap to edit.', edit: function () { self.setState({ edit: i, draft: p.cap, confirmRemove: false }); } };
+    });
+    var cur = s.edit >= 0 ? s.photos[s.edit] : { src: '' };
+    var n = s.photos.filter(function (p) { return p.ready; }).length;
+    return {
+      photos: photos, empty: s.photos.length === 0, hasGrid: s.photos.length > 0,
+      countLine: n + (n === 1 ? ' photo' : ' photos') + ' · tap a photo to add a caption',
+      adding: s.adding, addDone: s.addDone, addTotal: s.addTotal, addPct: Math.round(100 * s.addDone / s.addTotal),
+      editing: s.edit >= 0, cur: cur, draft: s.draft, confirmRemove: s.confirmRemove,
+      coverLabel: s.edit === s.cover ? 'This is the cover' : 'Use as album cover',
+      addPhotos: function () {
+        if (s.adding) return;
+        var more = START.slice(0, 3).map(function (x) { return { src: x[0], cap: '', ready: false }; });
+        self.setState({ photos: s.photos.concat(more), adding: true, addDone: 0, addTotal: 3 });
+        setTimeout(function () { self.runAdd(); }, 0);
+      },
+      typeCap: function (e) { self.setState({ draft: e.target.value }); },
+      makeCover: function () { self.setState({ cover: s.edit }); },
+      askRemove: function () { self.setState({ confirmRemove: true }); },
+      cancelRemove: function () { self.setState({ confirmRemove: false }); },
+      doRemove: function () { var l = s.photos.slice(); l.splice(s.edit, 1); self.setState({ photos: l, edit: -1, cover: s.cover === s.edit ? 0 : (s.cover > s.edit ? s.cover - 1 : s.cover) }); },
+      closeEdit: function () { self.setState({ edit: -1 }); },
+      saveEdit: function () { var l = s.photos.slice(); l[s.edit] = Object.assign({}, l[s.edit], { cap: (s.draft || '').trim() }); self.setState({ photos: l, edit: -1 }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

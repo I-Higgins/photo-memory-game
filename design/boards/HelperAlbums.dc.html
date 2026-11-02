@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<title>Family helper – albums</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#F4EFE7}
+a{color:#2D5F5D}a:hover{color:#1F4644}
+.btn{font:inherit;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;box-sizing:border-box}
+.btn:focus-visible,input:focus-visible{outline:4px solid #1F4644;outline-offset:3px}
+.btn-quiet{background:#FFFDF9;color:#2A2521;border:2px solid #D6CBBB}
+.btn-primary{background:#2D5F5D;color:#FFFFFF;border:2px solid #2D5F5D}
+.btn-danger{background:#A3402F;color:#FFFFFF;border:2px solid #A3402F}
+.btn-danger-quiet{background:#FFFDF9;color:#A3402F;border:2px solid #D6CBBB}
+.sm{height:48px;padding:0 16px;border-radius:12px;font-size:18px;font-weight:600}
+.panel{background:#FFFDF9;border-radius:20px;box-shadow:0 1px 0 rgba(42,37,33,.06),0 4px 14px rgba(42,37,33,.06)}
+</style>
+</helmet>
+<div style="width: 1180px; height: 820px; position: relative; background: #F4EFE7; color: #2A2521; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; padding: 24px 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px">
+<header style="display: grid; grid-template-columns: 260px 1fr 260px; align-items: center">
+<a href="Home.dc.html" class="btn btn-quiet" style="height: 56px; width: 220px; border-radius: 16px; font-size: 20px; font-weight: 600"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>Done, lock again</a>
+<h1 style="margin: 0; text-align: center; font-size: 30px; font-weight: 700">Family helper</h1>
+<div style="display: flex; justify-content: flex-end"><a href="Settings.dc.html" class="btn btn-quiet" style="height: 56px; padding: 0 22px; border-radius: 16px; font-size: 20px; font-weight: 600">Settings</a></div>
+</header>
+
+<div style="display: flex; gap: 24px; flex: 1; min-height: 0">
+<section class="panel" aria-labelledby="h-al" style="flex: 1 1 0; min-width: 0; padding: 24px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<h2 id="h-al" style="margin: 0; font-size: 24px">Albums</h2>
+<button type="button" class="btn btn-primary sm" onClick="{{newAlbum}}"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>New album</button>
+</div>
+<sc-for list="{{albums}}" as="a" hint-placeholder-count="3">
+<div style="display: flex; align-items: center; gap: 16px; padding: 12px; border-radius: 16px; background: #F7F2EA">
+<sc-if value="{{a.hasCover}}" hint-placeholder-val="{{ true }}"><img src="{{a.cover}}" alt="" style="width: 84px; height: 84px; object-fit: cover; border-radius: 12px; flex: none"></sc-if>
+<sc-if value="{{a.noCover}}" hint-placeholder-val="{{ false }}"><span style="width: 84px; height: 84px; border-radius: 12px; background: #E7DCCB; flex: none; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="48" height="42" viewBox="0 0 120 104"><rect x="14" y="14" width="60" height="74" rx="8" fill="#FFFDF9" stroke="#B9A88F" stroke-width="5" transform="rotate(-8 44 51)"></rect><rect x="46" y="10" width="60" height="74" rx="8" fill="#FFFDF9" stroke="#B9A88F" stroke-width="5" transform="rotate(7 76 47)"></rect></svg></span></sc-if>
+<a href="HelperAlbum.dc.html" style="flex: 1; min-width: 0; text-decoration: none; color: #2A2521; padding: 8px 0"><div style="font-size: 22px; font-weight: 700">{{a.name}}</div><div style="font-size: 17px; color: #5E554D">{{a.count}} · tap to open</div></a>
+<button type="button" class="btn btn-quiet sm" onClick="{{a.rename}}">Rename</button>
+<a href="HelperAlbum.dc.html" class="btn btn-quiet sm">Cover</a>
+<button type="button" class="btn btn-danger-quiet sm" onClick="{{a.del}}">Delete</button>
+</div>
+</sc-for>
+</section>
+
+<div style="width: 380px; flex: none; display: flex; flex-direction: column; gap: 20px">
+<section class="panel" aria-labelledby="h-st" style="padding: 24px; display: flex; flex-direction: column; gap: 12px">
+<h2 id="h-st" style="margin: 0; font-size: 22px">Storage</h2>
+<p style="margin: 0; font-size: 22px; line-height: 30px; font-weight: 600">{{photoLine}}</p>
+<div aria-hidden="true" style="height: 12px; border-radius: 6px; background: #E3D9CA; overflow: hidden"><div style="width: 18%; height: 12px; background: #2D5F5D"></div></div>
+<p style="margin: 0; font-size: 18px; line-height: 25px; color: #5E554D">Using about 140 MB. This iPad has plenty of room left.</p>
+</section>
+<section class="panel" aria-labelledby="h-bk" style="padding: 24px; display: flex; flex-direction: column; gap: 12px">
+<h2 id="h-bk" style="margin: 0; font-size: 22px">Back up</h2>
+<p style="margin: 0; font-size: 18px; line-height: 26px; color: #2A2521">The photos are only kept in this app on this iPad. If Safari’s website data is cleared, or the app is removed, they are lost. A backup file keeps a copy you can put back.</p>
+<p style="margin: 0; font-size: 17px; color: #5E554D">Last backup: 3 weeks ago</p>
+<button type="button" class="btn btn-primary" onClick="{{openBackup}}" style="height: 60px; border-radius: 16px; font-size: 20px; font-weight: 700">Back up an album</button>
+<button type="button" class="btn btn-quiet" onClick="{{openRestore}}" style="height: 56px; border-radius: 16px; font-size: 19px; font-weight: 600">Restore from a backup file</button>
+</section>
+</div>
+</div>
+
+<sc-if value="{{dlgDelete}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; background: rgba(42,37,33,.45); display: flex; align-items: center; justify-content: center">
+<div role="alertdialog" aria-modal="true" aria-labelledby="dd" style="width: 600px; background: #FFFDF9; border-radius: 24px; padding: 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 14px">
+<h2 id="dd" style="margin: 0; font-size: 30px; line-height: 38px">Delete “{{target.name}}”?</h2>
+<p style="margin: 0; font-size: 21px; line-height: 30px; color: #5E554D">This removes the album and its {{target.count}} from this iPad. It can’t be undone. Back it up first if you might want it again.</p>
+<div style="display: flex; gap: 14px; margin-top: 10px">
+<button type="button" class="btn btn-quiet" onClick="{{closeDlg}}" style="flex: 1; height: 64px; border-radius: 18px; font-size: 21px; font-weight: 600">Keep album</button>
+<button type="button" class="btn btn-danger" onClick="{{confirmDelete}}" style="flex: 1; height: 64px; border-radius: 18px; font-size: 21px; font-weight: 700">Delete album</button>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{dlgName}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; background: rgba(42,37,33,.45); display: flex; align-items: center; justify-content: center">
+<div role="dialog" aria-modal="true" aria-labelledby="dn" style="width: 600px; background: #FFFDF9; border-radius: 24px; padding: 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 14px">
+<h2 id="dn" style="margin: 0; font-size: 30px; line-height: 38px">{{nameTitle}}</h2>
+<label for="album-name" style="font-size: 19px; color: #5E554D">Album name</label>
+<input id="album-name" type="text" value="{{draft}}" onChange="{{typeName}}" placeholder="For example: Fishing trips" style="font: inherit; font-size: 24px; height: 64px; padding: 0 18px; border-radius: 14px; border: 2px solid #8E8377; background: #FFFFFF; color: #2A2521">
+<div style="display: flex; gap: 14px; margin-top: 10px">
+<button type="button" class="btn btn-quiet" onClick="{{closeDlg}}" style="flex: 1; height: 64px; border-radius: 18px; font-size: 21px; font-weight: 600">Cancel</button>
+<button type="button" class="btn btn-primary" onClick="{{saveName}}" style="flex: 1; height: 64px; border-radius: 18px; font-size: 21px; font-weight: 700">Save</button>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{dlgBackup}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; background: rgba(42,37,33,.45); display: flex; align-items: center; justify-content: center">
+<div role="dialog" aria-modal="true" aria-labelledby="db" style="width: 620px; background: #FFFDF9; border-radius: 24px; padding: 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 14px">
+<h2 id="db" style="margin: 0; font-size: 30px; line-height: 38px">{{bkTitle}}</h2>
+<p style="margin: 0; font-size: 20px; line-height: 29px; color: #5E554D">{{bkText}}</p>
+<div style="display: flex; gap: 14px; margin-top: 10px">
+<button type="button" class="btn btn-quiet" onClick="{{closeDlg}}" style="flex: 1; height: 64px; border-radius: 18px; font-size: 21px; font-weight: 600">{{bkCancel}}</button>
+<sc-if value="{{bkCanGo}}" hint-placeholder-val="{{ true }}"><button type="button" class="btn btn-primary" onClick="{{bkGo}}" style="flex: 1; height: 64px; border-radius: 18px; font-size: 21px; font-weight: 700">{{bkAction}}</button></sc-if>
+</div>
+</div>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1180,"height":820}}'>
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    this.state = { albums: [
+      { name: 'Family favourites', n: 24, cover: '../assets/demo-photos/beach.svg' },
+      { name: 'Fishing trips', n: 16, cover: '../assets/demo-photos/fish.svg' },
+      { name: 'The grandkids', n: 8, cover: '' }
+    ], dlg: null, idx: -1, draft: '', bkStep: 0, bkMode: 'backup' };
+  }
+  renderVals() {
+    var s = this.state, self = this;
+    var total = s.albums.reduce(function (t, a) { return t + a.n; }, 0);
+    var albums = s.albums.map(function (a, i) {
+      return { name: a.name, count: a.n === 1 ? '1 photo' : a.n + ' photos', cover: a.cover, hasCover: !!a.cover, noCover: !a.cover,
+        rename: function () { self.setState({ dlg: 'name', idx: i, draft: a.name }); },
+        del: function () { self.setState({ dlg: 'delete', idx: i }); } };
+    });
+    var t = s.idx >= 0 && s.albums[s.idx] ? albums[s.idx] : { name: '', count: '' };
+    var bk = s.bkMode === 'backup'
+      ? (s.bkStep === 0 ? ['Back up “Family favourites”', 'This makes one file with the album’s photos and captions. Save it to Files, iCloud Drive or email it to yourself.', 'Cancel', 'Save backup file', true]
+                         : ['Backup saved', 'Family-favourites-backup.zip is ready. Keep it somewhere safe, away from this iPad if you can.', 'Done', '', false])
+      : ['Restore from a backup file', 'Pick a backup file you saved before. Its album will be added here. Albums already on this iPad are not changed.', 'Cancel', 'Choose file', true];
+    return {
+      albums: albums, target: t,
+      photoLine: total + ' photos saved on this iPad',
+      dlgDelete: s.dlg === 'delete', dlgName: s.dlg === 'name', dlgBackup: s.dlg === 'backup',
+      nameTitle: s.idx >= 0 ? 'Rename album' : 'New album', draft: s.draft,
+      bkTitle: bk[0], bkText: bk[1], bkCancel: bk[2], bkAction: bk[3], bkCanGo: bk[4],
+      typeName: function (e) { self.setState({ draft: e.target.value }); },
+      newAlbum: function () { self.setState({ dlg: 'name', idx: -1, draft: '' }); },
+      closeDlg: function () { self.setState({ dlg: null, bkStep: 0 }); },
+      saveName: function () {
+        var name = (s.draft || '').trim() || 'New album';
+        var list = s.albums.slice();
+        if (s.idx >= 0) list[s.idx] = Object.assign({}, list[s.idx], { name: name }); else list.push({ name: name, n: 0, cover: '' });
+        self.setState({ albums: list, dlg: null });
+      },
+      confirmDelete: function () { var list = s.albums.slice(); list.splice(s.idx, 1); self.setState({ albums: list, dlg: null, idx: -1 }); },
+      openBackup: function () { self.setState({ dlg: 'backup', bkMode: 'backup', bkStep: 0 }); },
+      openRestore: function () { self.setState({ dlg: 'backup', bkMode: 'restore', bkStep: 0 }); },
+      bkGo: function () { if (s.bkMode === 'backup') self.setState({ bkStep: 1 }); else self.setState({ dlg: null }); }
+    };
+  }
+}
+</script>
+</body>
+</html>
