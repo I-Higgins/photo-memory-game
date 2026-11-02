@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<title>Design tokens</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#FFFDF9}
+.lbl{margin:0;font-size:15px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#5E554D}
+table{border-collapse:collapse;width:100%}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid #E3D9CA;font-size:15px;vertical-align:middle}
+th{font-size:13px;color:#5E554D;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+</style>
+</helmet>
+<div style="width: 1280px; height: 2600px; background: #FFFDF9; color: #2A2521; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; padding: 56px; box-sizing: border-box; display: flex; flex-direction: column; gap: 40px">
+<header>
+<h1 style="margin: 0; font-size: 40px; line-height: 48px">Design tokens</h1>
+<p style="margin: 6px 0 0; font-size: 18px; line-height: 27px; color: #5E554D; max-width: 900px">CSS custom properties on <code>:root</code>, swapped per theme with <code>[data-theme]</code> and per text size with <code>[data-text]</code>. Contrast ratios are against the theme’s background unless noted. There was no word search token file to start from, so these are new. Copy the name list into the word search app to make the two match.</p>
+</header>
+
+<section style="display: flex; flex-direction: column; gap: 14px">
+<h2 class="lbl">Colour · per theme</h2>
+<table>
+<thead><tr><th style="width: 200px">Token</th><th>Light (default)</th><th>Dark</th><th>High contrast</th><th style="width: 300px">Used for</th></tr></thead>
+<tbody>
+<sc-for list="{{colours}}" as="c" hint-placeholder-count="14">
+<tr>
+<td><code>{{c.name}}</code></td>
+<sc-for list="{{c.vals}}" as="v" hint-placeholder-count="3"><td><span style="display: inline-flex; align-items: center; gap: 10px"><span style="width: 28px; height: 28px; border-radius: 8px; background: {{v.hex}}; box-shadow: inset 0 0 0 1px rgba(0,0,0,.15); flex: none"></span><span><code>{{v.hex}}</code><br><span style="font-size: 13px; color: #5E554D">{{v.note}}</span></span></span></td></sc-for>
+<td style="color: #5E554D">{{c.use}}</td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</section>
+
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; align-items: start">
+<section style="display: flex; flex-direction: column; gap: 14px">
+<h2 class="lbl">Type · system stack, px at each text size</h2>
+<table>
+<thead><tr><th>Token</th><th>Normal</th><th>Large</th><th>Extra large</th><th>Weight / LH</th></tr></thead>
+<tbody>
+<sc-for list="{{type}}" as="t" hint-placeholder-count="7"><tr><td><code>{{t.name}}</code></td><td>{{t.n}}</td><td>{{t.l}}</td><td>{{t.xl}}</td><td style="color: #5E554D">{{t.w}}</td></tr></sc-for>
+</tbody>
+</table>
+<p style="margin: 0; font-size: 15px; line-height: 22px; color: #5E554D">Stack: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif. Large = ×1.2, Extra large = ×1.4, rounded. Card sizes never change with text size.</p>
+</section>
+<section style="display: flex; flex-direction: column; gap: 14px">
+<h2 class="lbl">Space, radius, size, shadow, motion</h2>
+<table>
+<tbody>
+<sc-for list="{{misc}}" as="m" hint-placeholder-count="12"><tr><td style="width: 210px"><code>{{m.name}}</code></td><td><code>{{m.val}}</code></td><td style="color: #5E554D">{{m.use}}</td></tr></sc-for>
+</tbody>
+</table>
+</section>
+</div>
+
+<section style="display: flex; flex-direction: column; gap: 14px">
+<h2 class="lbl">tokens.css · copy as is</h2>
+<pre style="margin: 0; background: #2A2521; color: #F4EFE7; border-radius: 16px; padding: 28px; font-size: 13px; line-height: 19px; column-count: 2; column-gap: 48px; white-space: pre">{{css}}</pre>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":2600}}'>
+var C = [
+  ['--bg', ['#F4EFE7', ''], ['#1C1917', ''], ['#FFFFFF', ''], 'Page background'],
+  ['--surface', ['#FFFDF9', ''], ['#282320', ''], ['#FFFFFF', '+ 3px --line border'], 'Tiles, panels, card face mat, dialogs'],
+  ['--surface-2', ['#EFE7DA', ''], ['#332D29', ''], ['#FFFFFF', ''], 'Segmented track, pressed quiet button'],
+  ['--ink', ['#2A2521', '13.2 : 1'], ['#F4EFE7', '14.9 : 1'], ['#000000', '21 : 1'], 'All main text, icons'],
+  ['--ink-2', ['#5E554D', '6.4 : 1'], ['#C9BFB3', '9.3 : 1'], ['#1F1F1F', '16 : 1'], 'Secondary text (never below 17 px)'],
+  ['--line', ['#D6CBBB', 'decor'], ['#5A514A', 'decor'], ['#000000', '21 : 1'], 'Quiet button border, dividers'],
+  ['--accent', ['#2D5F5D', '6.3 : 1'], ['#7FBDB8', '8.2 : 1'], ['#003B3A', '12.5 : 1'], 'Primary buttons, switches on, matched ring'],
+  ['--on-accent', ['#FFFFFF', '7.3 : 1 on accent'], ['#10201F', '7.9 : 1 on accent'], ['#FFFFFF', '12.5 : 1 on accent'], 'Text on accent'],
+  ['--card-back', ['#2D5F5D', '6.3 : 1'], ['#3F7471', '3.3 : 1'], ['#003B3A', '12.5 : 1'], 'Face-down card'],
+  ['--on-card', ['#F4EFE7', ''], ['#F4EFE7', ''], ['#FFFFFF', ''], 'Card back motif and frame'],
+  ['--pick', ['#A86B14', '3.8 : 1'], ['#E6A94A', '8.6 : 1'], ['#7A3E00', '9.6 : 1'], 'First-card ring, hint glow (non-text, 3:1 min)'],
+  ['--danger', ['#A3402F', '6.5 : 1 on surface'], ['#F08C78', '7.4 : 1'], ['#8A1C0C', '9.9 : 1'], 'Delete actions only, never in the game'],
+  ['--focus', ['#1F4644', ''], ['#F2C94C', ''], ['#000000', ''], '4 px focus ring, 4 px offset'],
+  ['--scrim', ['rgba(42,37,33,.45)', ''], ['rgba(0,0,0,.6)', ''], ['rgba(0,0,0,.7)', ''], 'Behind dialogs']
+];
+var T = [
+  ['--fs-small', 17, 20, 24, '400 / 1.4'], ['--fs-body', 20, 24, 28, '400 / 1.4'], ['--fs-button', 22, 26, 31, '600–700 / 1.2'],
+  ['--fs-title', 28, 34, 39, '700 / 1.25'], ['--fs-heading', 34, 41, 48, '700 / 1.2'], ['--fs-caption-big', 32, 38, 45, '600 / 1.25 (match moment)'], ['--fs-display', 40, 48, 56, '700 / 1.2']
+];
+var M = [
+  ['--space-1…10', '4 8 12 16 20 24 32 40 56 72', 'Only these steps'], ['--page-pad', '40 / 32 / 16', 'iPad landscape / portrait / iPhone side gutter'],
+  ['--radius-sm / md', '12 / 16', 'Inputs, small buttons / buttons'], ['--radius-card', '18 (12 on iPhone)', 'Game cards; photo inset radius 12'],
+  ['--radius-lg / xl', '20 / 24', 'Big buttons / tiles, dialogs'], ['--tap-player', '60 px min height', 'Every player control (72 for main action)'],
+  ['--tap-helper', '48 px min', 'Helper area controls'], ['--shadow-card', '0 1px 0 /6%, 0 6px 18px /12%', 'Cards and tiles (ink-tinted)'],
+  ['--shadow-dialog', '0 24px 64px /30%', 'Dialogs, match photo'], ['--dur-flip', '420ms', 'cubic-bezier(.2,.7,.2,1)'],
+  ['--dur-fade', '220ms linear', 'Reduced-motion replacement for every move'], ['--hold-mismatch', '1200 / 2000 / 3200ms', 'Short / Medium (default) / Long']
+];
+var CSS = [
+':root{',
+'  /* light (default) */',
+'  --bg:#F4EFE7; --surface:#FFFDF9; --surface-2:#EFE7DA;',
+'  --ink:#2A2521; --ink-2:#5E554D; --line:#D6CBBB;',
+'  --accent:#2D5F5D; --accent-press:#1F4644; --on-accent:#FFFFFF;',
+'  --card-back:#2D5F5D; --on-card:#F4EFE7;',
+'  --pick:#A86B14; --danger:#A3402F; --focus:#1F4644;',
+'  --scrim:rgba(42,37,33,.45);',
+'  --shadow-card:0 1px 0 rgba(42,37,33,.06),0 6px 18px rgba(42,37,33,.12);',
+'  --shadow-raised:0 10px 24px rgba(42,37,33,.18);',
+'  --shadow-dialog:0 24px 64px rgba(42,37,33,.30);',
+'  --card-border:0px solid transparent;',
+'',
+'  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text",',
+'    "Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;',
+'  --fs-small:17px; --fs-body:20px; --fs-button:22px;',
+'  --fs-title:28px; --fs-heading:34px;',
+'  --fs-caption-big:32px; --fs-display:40px;',
+'',
+'  --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px;',
+'  --space-5:20px; --space-6:24px; --space-7:32px; --space-8:40px;',
+'  --space-9:56px; --space-10:72px;',
+'  --radius-sm:12px; --radius-md:16px; --radius-card:18px;',
+'  --radius-lg:20px; --radius-xl:24px;',
+'  --tap-player:60px; --tap-main:72px; --tap-helper:48px;',
+'',
+'  --ease-out:cubic-bezier(.2,.7,.2,1);',
+'  --dur-press:200ms; --dur-fade:220ms; --dur-overlay:320ms;',
+'  --dur-flip:420ms; --dur-hint:1300ms; --hint-repeats:3;',
+'  --delay-match-moment:650ms; --dur-moment-auto:6000ms;',
+'  --dur-peek:5000ms; --hold-unlock:2000ms;',
+'  --hold-mismatch:2000ms; /* 1200 | 2000 | 3200 */',
+'}',
+'[data-theme="dark"]{',
+'  --bg:#1C1917; --surface:#282320; --surface-2:#332D29;',
+'  --ink:#F4EFE7; --ink-2:#C9BFB3; --line:#5A514A;',
+'  --accent:#7FBDB8; --accent-press:#9FD3CE; --on-accent:#10201F;',
+'  --card-back:#3F7471; --on-card:#F4EFE7;',
+'  --pick:#E6A94A; --danger:#F08C78; --focus:#F2C94C;',
+'  --scrim:rgba(0,0,0,.6);',
+'  --shadow-card:0 6px 18px rgba(0,0,0,.5);',
+'  --shadow-dialog:0 24px 64px rgba(0,0,0,.6);',
+'  --card-border:1px solid rgba(255,255,255,.08);',
+'}',
+'[data-theme="contrast"]{',
+'  --bg:#FFFFFF; --surface:#FFFFFF; --surface-2:#FFFFFF;',
+'  --ink:#000000; --ink-2:#1F1F1F; --line:#000000;',
+'  --accent:#003B3A; --accent-press:#000000; --on-accent:#FFFFFF;',
+'  --card-back:#003B3A; --on-card:#FFFFFF;',
+'  --pick:#7A3E00; --danger:#8A1C0C; --focus:#000000;',
+'  --scrim:rgba(0,0,0,.7);',
+'  --shadow-card:none; --shadow-dialog:none;',
+'  --card-border:3px solid #000000;',
+'}',
+'[data-text="large"]{',
+'  --fs-small:20px; --fs-body:24px; --fs-button:26px;',
+'  --fs-title:34px; --fs-heading:41px;',
+'  --fs-caption-big:38px; --fs-display:48px;',
+'}',
+'[data-text="xl"]{',
+'  --fs-small:24px; --fs-body:28px; --fs-button:31px;',
+'  --fs-title:39px; --fs-heading:48px;',
+'  --fs-caption-big:45px; --fs-display:56px;',
+'}',
+'@media (prefers-reduced-motion:reduce){',
+'  :root{ --dur-flip:0ms; --dur-hint:0ms; }',
+'}',
+'/* also add class "reduce-motion" on <html> when the',
+'   media query matches, so JS timers can check one flag */'
+].join('\n');
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      colours: C.map(function (r) { return { name: r[0], vals: [{ hex: r[1][0], note: r[1][1] }, { hex: r[2][0], note: r[2][1] }, { hex: r[3][0], note: r[3][1] }], use: r[4] }; }),
+      type: T.map(function (r) { return { name: r[0], n: r[1], l: r[2], xl: r[3], w: r[4] }; }),
+      misc: M.map(function (r) { return { name: r[0], val: r[1], use: r[2] }; }),
+      css: CSS
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<title>Notes for Claude Code</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#FFFDF9}
+.lbl{margin:0;font-size:15px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#5E554D}
+ul{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:10px}
+li{font-size:17px;line-height:25px}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:15px;background:#F4EFE7;padding:1px 5px;border-radius:5px}
+.col{border-radius:20px;padding:28px;display:flex;flex-direction:column;gap:16px}
+</style>
+</helmet>
+<div style="width: 1280px; height: 1500px; background: #FFFDF9; color: #2A2521; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; padding: 56px; box-sizing: border-box; display: flex; flex-direction: column; gap: 28px">
+<h1 style="margin: 0; font-size: 40px; line-height: 48px">Notes for Claude Code</h1>
+
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; align-items: start">
+<section class="col" style="background: #E4EEEC">
+<h2 class="lbl" style="color: #1F4644">Follow exactly</h2>
+<ul>
+<li>Colour, type, radius and timing values from <code>tokens.css</code>. Don’t add new colours.</li>
+<li>No timers, scores, move counters, lives, “wrong” colours, buzzes or game over, anywhere.</li>
+<li>Card grid table and the size formula (Layout board). Cards stay between 4:5 and 5:4.</li>
+<li>Cards centre-crop (<code>object-fit: cover</code>). The match moment is never cropped (<code>contain</code>).</li>
+<li>Player controls at least 60 px tall, the main action 72, helper 48, never below 44. Every icon has a visible text label.</li>
+<li>Back / Hint / Restart sit outside the card area with clear space. Restart always asks first.</li>
+<li>The helper area opens only by a 2 s press-and-hold or a 4-digit code. Delete always confirms and names what is lost.</li>
+<li>A still version of every animation (Motion board), switched by <code>prefers-reduced-motion</code>.</li>
+<li>Read aloud is off by default. When it’s off, its button doesn’t render at all (no empty gap).</li>
+<li>Photos stay on the device: no network calls with photo data, no analytics.</li>
+<li>Real buttons, links, labelled inputs, <code>role="switch"</code> / radiogroup, visible 4 px focus ring.</li>
+<li>Original artwork only: the SVGs on the artwork boards, no icon fonts or brand marks.</li>
+</ul>
+</section>
+
+<section class="col" style="background: #F4EFE7">
+<h2 class="lbl">Your call</h2>
+<ul>
+<li>File structure, state handling and routing (hash routes are fine).</li>
+<li>How photos are stored: IndexedDB suggested. Resize on import to a 1600 px long edge (JPEG ~0.82) plus a 600 px thumbnail for cards. Call <code>navigator.storage.persist()</code> after the first album.</li>
+<li>Backup format: one .zip holding a manifest JSON (album, captions, order, cover) and the images. Use the share sheet / download on iPad.</li>
+<li>Shuffle: any fair shuffle. Never repeat the exact same layout twice in a row.</li>
+<li>Which unmatched pair the hint picks. Suggested: the partner of a turned-up card, else the pair seen most often.</li>
+<li>Copy can be tightened, as long as it stays plain, short and kind.</li>
+<li>Service-worker strategy, as long as the app works fully offline after one online visit and shows the update banner.</li>
+<li>Exact easing curves within ±60 ms of the given durations.</li>
+<li>iPhone layouts beyond what’s drawn (lower fidelity was agreed).</li>
+</ul>
+</section>
+</div>
+
+<section class="col" style="background: #FBF1E2">
+<h2 class="lbl" style="color: #7A4A0E">Decisions to check · additions to the brief</h2>
+<ul>
+<li>No word search tokens existed to reuse, so this sets a new shared system. Port the same token names to the word search app.</li>
+<li>Added a <code>--pick</code> amber for the first-card ring and the hint glow, darkened to #A86B14 so the ring passes 3:1 against the background.</li>
+<li>Tapping a difficulty starts the game straight away (no extra Start button). The “Look at the cards first” switch sits on that screen and in Settings.</li>
+<li>Settings opened from Home can’t change the helper lock; that section only works from inside the helper area.</li>
+<li>A forgotten code resets with a 10 s hold. Photos are never lost to a forgotten code.</li>
+<li>A photo that fails to load still plays as a card (“This photo couldn’t be shown”), so a round can always finish.</li>
+<li>App name “Photo Pairs” is a working title.</li>
+</ul>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1500}}'>
+class Component extends DCLogic { renderVals() { return {}; } }
+</script>
+</body>
+</html>

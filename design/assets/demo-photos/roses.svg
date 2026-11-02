@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 900" width="600" height="900">
+<rect width="600" height="900" fill="#EFE6D6"/>
+<g stroke="#D6C6A8" stroke-width="12">
+<line x1="-50" y1="100" x2="650" y2="800"/><line x1="-50" y1="500" x2="350" y2="900"/><line x1="250" y1="-100" x2="650" y2="300"/>
+<line x1="650" y1="100" x2="-50" y2="800"/><line x1="650" y1="500" x2="250" y2="900"/><line x1="350" y1="-100" x2="-50" y2="300"/>
+</g>
+<g fill="#5F8B57">
+<ellipse cx="160" cy="380" rx="70" ry="30" transform="rotate(-30 160 380)"/>
+<ellipse cx="440" cy="300" rx="70" ry="30" transform="rotate(30 440 300)"/>
+<ellipse cx="300" cy="560" rx="80" ry="32" transform="rotate(-20 300 560)"/>
+<ellipse cx="470" cy="640" rx="70" ry="28" transform="rotate(25 470 640)"/>
+<ellipse cx="130" cy="700" rx="70" ry="28" transform="rotate(-35 130 700)"/>
+<ellipse cx="360" cy="800" rx="80" ry="30" transform="rotate(15 360 800)"/>
+</g>
+<g>
+<circle cx="230" cy="260" r="92" fill="#D9667C"/><circle cx="230" cy="260" r="64" fill="#E58296"/><path d="M196 260 C 196 220 264 220 264 260 C 264 290 220 292 214 268" stroke="#B94B63" stroke-width="7" fill="none"/>
+<circle cx="420" cy="470" r="80" fill="#EA9AA6"/><circle cx="420" cy="470" r="54" fill="#F2B6BE"/><path d="M392 470 C 392 438 448 438 448 470 C 448 494 412 496 406 476" stroke="#D16F81" stroke-width="6" fill="none"/>
+<circle cx="190" cy="560" r="70" fill="#D9667C"/><circle cx="190" cy="560" r="46" fill="#E58296"/><path d="M166 560 C 166 532 214 532 214 560 C 214 580 184 582 178 564" stroke="#B94B63" stroke-width="6" fill="none"/>
+<circle cx="330" cy="700" r="86" fill="#E2788C"/><circle cx="330" cy="700" r="58" fill="#EC98A8"/><path d="M300 700 C 300 664 360 664 360 700 C 360 726 322 728 316 706" stroke="#C25A70" stroke-width="6" fill="none"/>
+</g>
+</svg>

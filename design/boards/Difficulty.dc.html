@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<title>Choose how many pairs</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#F4EFE7}
+a{color:#2D5F5D}a:hover{color:#1F4644}
+.btn{font:inherit;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;box-sizing:border-box}
+.btn:focus-visible,.choice:focus-visible,.switch:focus-visible{outline:4px solid #1F4644;outline-offset:4px}
+.btn-quiet{background:#FFFDF9;color:#2A2521;border:2px solid #D6CBBB}
+.choice{display:flex;flex-direction:column;align-items:center;gap:18px;text-decoration:none;color:#2A2521;background:#FFFDF9;border:2px solid transparent;border-radius:24px;padding:28px 16px 26px;box-shadow:0 1px 0 rgba(42,37,33,.06),0 6px 18px rgba(42,37,33,.10)}
+.choice:active{border-color:#2D5F5D}
+.switch{font:inherit;cursor:pointer;border:0;padding:0;width:76px;height:44px;border-radius:22px;position:relative;flex:none;transition:background 200ms ease-out}
+.knob{position:absolute;top:4px;width:36px;height:36px;border-radius:18px;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:left 200ms ease-out}
+@media (prefers-reduced-motion: reduce){.switch,.knob{transition:none}}
+</style>
+</helmet>
+<div style="width: 1180px; height: 820px; background: #F4EFE7; color: #2A2521; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; padding: 24px 40px 0; box-sizing: border-box; display: flex; flex-direction: column; gap: 28px">
+
+<header style="display: grid; grid-template-columns: 200px 1fr 200px; align-items: start">
+<a href="Home.dc.html" class="btn btn-quiet" style="height: 60px; width: 132px; padding: 0 26px 0 16px; border-radius: 16px; font-size: 22px; font-weight: 600">
+<svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"></path></svg>
+<span>Back</span>
+</a>
+<div style="text-align: center; padding-top: 4px">
+<p style="margin: 0; font-size: 20px; line-height: 26px; color: #5E554D">Family favourites</p>
+<h1 style="margin: 0; font-size: 36px; line-height: 44px; font-weight: 700; letter-spacing: -0.3px">How many pairs?</h1>
+</div>
+<div></div>
+</header>
+
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px">
+<sc-for list="{{choices}}" as="c" hint-placeholder-count="4">
+<a href="Main.dc.html" class="choice" aria-label="{{c.aria}}">
+<div aria-hidden="true" style="height: 168px; display: flex; align-items: center; justify-content: center">
+<div style="display: grid; grid-template-columns: repeat({{c.cols}}, {{c.cell}}px); gap: 6px">
+<sc-for list="{{c.cells}}" as="k" hint-placeholder-count="6">
+<span style="display: block; width: {{c.cell}}px; height: {{c.cellH}}px; border-radius: 5px; background: #2D5F5D"></span>
+</sc-for>
+</div>
+</div>
+<div style="text-align: center">
+<div style="font-size: 34px; line-height: 40px; font-weight: 700">{{c.pairs}} pairs</div>
+<div style="font-size: 20px; line-height: 26px; color: #5E554D">{{c.cards}} cards</div>
+</div>
+<sc-if value="{{c.last}}" hint-placeholder-val="{{ false }}">
+<span style="font-size: 17px; font-weight: 600; color: #1F4644; background: #DCE8E6; padding: 6px 12px; border-radius: 10px">Played last time</span>
+</sc-if>
+<sc-if value="{{c.notLast}}" hint-placeholder-val="{{ true }}">
+<span style="font-size: 17px; padding: 6px 12px; color: #5E554D">{{c.note}}</span>
+</sc-if>
+</a>
+</sc-for>
+</div>
+
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 24px; background: #FFFDF9; border-radius: 20px; padding: 20px 28px; box-shadow: 0 1px 0 rgba(42,37,33,.06)">
+<div>
+<div id="peek-label" style="font-size: 22px; line-height: 28px; font-weight: 600">Look at all the cards first</div>
+<div style="font-size: 18px; line-height: 24px; color: #5E554D">The photos show for a few seconds, then turn over.</div>
+</div>
+<div style="display: flex; align-items: center; gap: 14px">
+<span style="font-size: 20px; font-weight: 600; color: #5E554D; width: 36px; text-align: right">{{peekWord}}</span>
+<button type="button" class="switch" role="switch" aria-checked="{{peekAria}}" aria-labelledby="peek-label" onClick="{{togglePeek}}" style="background: {{switchBg}}"><span class="knob" style="left: {{knobLeft}}px"></span></button>
+</div>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1180,"height":820}}'>
+var SPEC = [
+  { pairs: 3, cols: 3, rows: 2, note: 'A gentle start' },
+  { pairs: 6, cols: 4, rows: 3, note: '' },
+  { pairs: 8, cols: 4, rows: 4, note: '' },
+  { pairs: 10, cols: 5, rows: 4, note: 'The most cards' }
+];
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { peek: true }; }
+  renderVals() {
+    var self = this;
+    var choices = SPEC.map(function (s) {
+      var cell = Math.floor(Math.min((200 - (s.cols - 1) * 6) / s.cols, ((150 - (s.rows - 1) * 6) / s.rows) * 1.2));
+      var cells = [];
+      for (var i = 0; i < s.pairs * 2; i++) cells.push(i);
+      var last = s.pairs === 6;
+      return { pairs: s.pairs, cards: s.pairs * 2, cols: s.cols, cell: cell, cellH: Math.round(cell / 1.2), cells: cells, last: last, notLast: !last, note: s.note || ' ', aria: s.pairs + ' pairs, ' + (s.pairs * 2) + ' cards' + (last ? ', played last time' : '') };
+    });
+    var on = this.state.peek;
+    return {
+      choices: choices,
+      peekWord: on ? 'On' : 'Off',
+      peekAria: on ? 'true' : 'false',
+      switchBg: on ? '#2D5F5D' : '#8E8377',
+      knobLeft: on ? 36 : 4,
+      togglePeek: function () { self.setState({ peek: !self.state.peek }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

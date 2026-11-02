@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<title>App icon, card back, placeholders, UI icons</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#E9E2D6}
+.lbl{margin:0;font-size:15px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#5E554D}
+.cap{font-size:15px;color:#5E554D;text-align:center}
+.ic{display:flex;flex-direction:column;align-items:center;gap:8px;width:120px}
+.ic span{font-size:15px;color:#2A2521}
+</style>
+</helmet>
+<div style="width: 1180px; height: 1500px; background: #E9E2D6; color: #2A2521; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; padding: 48px; box-sizing: border-box; display: flex; flex-direction: column; gap: 40px">
+<svg width="0" height="0" style="position: absolute" aria-hidden="true">
+<defs>
+<symbol id="appicon" viewBox="0 0 1024 1024">
+<rect width="1024" height="1024" fill="#2D5F5D"></rect>
+<circle cx="512" cy="512" r="430" fill="#33696A"></circle>
+<g transform="rotate(-10 400 520)"><rect x="210" y="260" width="380" height="480" rx="44" fill="#F4EFE7" opacity=".6"></rect></g>
+<g transform="rotate(8 600 500)">
+<rect x="420" y="230" width="380" height="480" rx="44" fill="#F4EFE7"></rect>
+<rect x="460" y="270" width="300" height="300" rx="22" fill="#9CC9E2"></rect>
+<circle cx="690" cy="340" r="36" fill="#FFF1C4"></circle>
+<path d="M460 480 C 540 430 600 440 660 480 C 700 505 730 500 760 485 V 548 a 22 22 0 0 1 -22 22 H 482 a 22 22 0 0 1 -22 -22 Z" fill="#6E9A62"></path>
+</g>
+<path d="M700 790c-74-52-118-94-118-142a62 62 0 0 1 118-26 62 62 0 0 1 118 26c0 48-44 90-118 142z" fill="#C7861F" stroke="#2D5F5D" stroke-width="20" stroke-linejoin="round"></path>
+</symbol>
+<symbol id="cardback" viewBox="0 0 300 250">
+<rect width="300" height="250" rx="20" fill="#2D5F5D"></rect>
+<rect x="11" y="11" width="278" height="228" rx="13" fill="none" stroke="#F4EFE7" stroke-opacity=".45" stroke-width="2.5"></rect>
+<g fill="#F4EFE7" fill-opacity=".35"><path d="M11 11h28L11 39z"></path><path d="M289 11h-28l28 28z"></path><path d="M11 239h28L11 211z"></path><path d="M289 239h-28l28-28z"></path></g>
+<g transform="translate(98 81)" fill="none" stroke="#F4EFE7" stroke-width="3" stroke-linejoin="round"><rect x="8" y="14" width="54" height="62" rx="6" transform="rotate(-9 35 45)" opacity=".55"></rect><rect x="40" y="10" width="54" height="62" rx="6" transform="rotate(8 67 41)"></rect><path d="M67 52c-7-5-11-9-11-13.5a5.5 5.5 0 0 1 11-1.5 5.5 5.5 0 0 1 11 1.5C78 43 74 47 67 52z" fill="#F4EFE7"></path></g>
+</symbol>
+</defs>
+</svg>
+
+<section style="display: flex; flex-direction: column; gap: 18px">
+<h2 class="lbl">App icon · master 1024 × 1024, full bleed, no transparency</h2>
+<div style="display: flex; gap: 40px; align-items: flex-end">
+<div style="display: flex; flex-direction: column; gap: 8px; align-items: center"><svg role="img" aria-label="App icon" width="420" height="420" style="border-radius: 92px; box-shadow: 0 18px 40px rgba(42,37,33,.25)"><use href="#appicon"></use></svg><span class="cap">1024 master (shown with iOS corner mask)</span></div>
+<div style="display: flex; flex-direction: column; gap: 8px; align-items: center"><svg aria-hidden="true" width="192" height="192" style="border-radius: 42px"><use href="#appicon"></use></svg><span class="cap">512 / 192</span></div>
+<div style="display: flex; flex-direction: column; gap: 8px; align-items: center"><svg aria-hidden="true" width="90" height="90" style="border-radius: 20px"><use href="#appicon"></use></svg><span class="cap">180 apple-touch</span></div>
+<div style="display: flex; flex-direction: column; gap: 8px; align-items: center">
+<div style="position: relative; width: 192px; height: 192px; border-radius: 96px; overflow: hidden; background: #2D5F5D"><svg aria-hidden="true" width="154" height="154" style="position: absolute; left: 19px; top: 19px"><use href="#appicon"></use></svg></div>
+<span class="cap">Maskable: art scaled to 80%,<br>teal fills the bleed</span>
+</div>
+</div>
+</section>
+
+<section style="display: flex; gap: 48px; align-items: flex-start">
+<div style="display: flex; flex-direction: column; gap: 18px">
+<h2 class="lbl">Card back · one design for every card</h2>
+<svg role="img" aria-label="Card back" width="420" height="350"><use href="#cardback"></use></svg>
+<span class="cap" style="text-align: left">Teal #2D5F5D · inset frame 11 px · photo corners 28 px · motif ≈ 42% of card width, centred</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 18px">
+<h2 class="lbl">Album with no cover yet</h2>
+<div style="width: 420px; height: 300px; border-radius: 24px; background: #E7DCCB; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center">
+<svg aria-hidden="true" width="420" height="300" viewBox="0 0 420 300" style="position: absolute; inset: 0"><g fill="#DDD0BC"><circle cx="40" cy="40" r="7"></circle><circle cx="110" cy="90" r="7"></circle><circle cx="190" cy="30" r="7"></circle><circle cx="360" cy="56" r="7"></circle><circle cx="390" cy="220" r="7"></circle><circle cx="50" cy="240" r="7"></circle><circle cx="300" cy="270" r="7"></circle><circle cx="160" cy="270" r="7"></circle></g></svg>
+<svg role="img" aria-label="Empty album" width="180" height="156" viewBox="0 0 120 104" style="position: relative"><rect x="14" y="14" width="60" height="74" rx="8" fill="#FFFDF9" stroke="#B9A88F" stroke-width="3" transform="rotate(-8 44 51)"></rect><rect x="46" y="10" width="60" height="74" rx="8" fill="#FFFDF9" stroke="#B9A88F" stroke-width="3" transform="rotate(7 76 47)"></rect><path d="M76 58c-7-5-11-8.6-11-12.8a5.5 5.5 0 0 1 11-1.4 5.5 5.5 0 0 1 11 1.4c0 4.2-4 7.8-11 12.8z" fill="#C7861F"></path></svg>
+</div>
+<span class="cap" style="text-align: left">Sand #E7DCCB with a soft dot pattern. Same art at every tile size; scale the motif to 45% of tile height.</span>
+</div>
+</section>
+
+<section style="display: flex; flex-direction: column; gap: 18px">
+<h2 class="lbl">UI icons · 24 × 24 grid, 2 px stroke (2.4 for chevrons), round caps · always paired with a text label</h2>
+<div style="display: flex; flex-wrap: wrap; gap: 20px; background: #FFFDF9; border-radius: 20px; padding: 28px">
+<div class="ic"><svg aria-hidden="true" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#2A2521" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"></path></svg><span>back</span></div>
+<div class="ic"><svg aria-hidden="true" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#2A2521" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"></path><path d="M10 21h4"></path><path d="M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1.1 2.2h5c.1-1 .5-1.7 1.1-2.2A6 6 0 0 0 12 3z"></path></svg><span>hint</span></div>
+<div class="ic"><svg aria-hidden="true" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#2A2521" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"></path><path d="M3 4v5h5"></path></svg><span>restart</span></div>
+<div class="ic"><svg aria-hidden="true" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#2A2521" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4.5v15l12.5-7.5z"></path></svg><span>play</span></div>
+<div class="ic"><svg aria-hidden="true" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#2A2521" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg><span>lock</span></div>
+<div class="ic"><svg aria-hidden="true" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#2A2521" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"></path></svg><span>settings</span></div>
+<div class="ic"><svg aria-hidden="true" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#2A2521" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg><span>add</span></div>
+<div class="ic"><svg aria-hidden="true" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#2A2521" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg><span>matched</span></div>
+<div class="ic"><svg aria-hidden="true" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#2A2521" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"></path><path d="M16.5 8.5a5 5 0 0 1 0 7"></path><path d="M19 6a8.5 8.5 0 0 1 0 12"></path></svg><span>read aloud</span></div>
+<div class="ic"><svg aria-hidden="true" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#2A2521" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 7l4-4 4 4"></path><path d="M6 11v9h12v-9"></path></svg><span>share (Safari)</span></div>
+<div class="ic"><svg aria-hidden="true" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#2A2521" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"></path><path d="M21 4v5h-5"></path></svg><span>refresh</span></div>
+<div class="ic"><svg aria-hidden="true" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#2A2521" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 11l4 4 4-4"></path><path d="M5 19h14"></path></svg><span>back up</span></div>
+<div class="ic"><svg aria-hidden="true" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#2A2521" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3M8 7l4-4 4 4"></path><path d="M5 19h14"></path></svg><span>restore</span></div>
+<div class="ic"><svg aria-hidden="true" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#2A2521" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6"></path><path d="M6 7l1 13h10l1-13M9 7V4h6v3"></path></svg><span>delete</span></div>
+<div class="ic"><svg aria-hidden="true" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#2A2521" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"></path></svg><span>caption</span></div>
+<div class="ic"><svg aria-hidden="true" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#2A2521" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 15l5-5 4 4 3-3 6 6"></path><path d="M4 4l16 16"></path></svg><span>photo error</span></div>
+<div class="ic"><svg aria-hidden="true" width="48" height="48" viewBox="0 0 24 24" fill="#C7861F"><path d="M12 21c-5-3.6-9-7.2-9-11.2A4.8 4.8 0 0 1 12 7a4.8 4.8 0 0 1 9 2.8c0 4-4 7.6-9 11.2z"></path></svg><span>heart</span></div>
+</div>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1180,"height":1500}}'>
+class Component extends DCLogic { renderVals() { return {}; } }
+</script>
+</body>
+</html>

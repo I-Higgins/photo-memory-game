@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<title>Memory game – iPad portrait, 20 cards</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#F4EFE7}
+a{color:#2D5F5D}a:hover{color:#1F4644}
+.btn{font:inherit;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;box-sizing:border-box}
+.btn-quiet{background:#FFFDF9;color:#2A2521;border:2px solid #D6CBBB}
+.card{position:relative;border:0;padding:0;background:none;border-radius:16px;font:inherit}
+.face{position:absolute;inset:0;border-radius:16px;overflow:hidden;box-shadow:0 1px 0 rgba(42,37,33,.06),0 6px 18px rgba(42,37,33,.12)}
+</style>
+</helmet>
+<div style="width: 820px; height: 1180px; position: relative; background: #F4EFE7; color: #2A2521; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; overflow: hidden">
+<header style="height: 108px; padding: 24px 32px 0; box-sizing: border-box; display: flex; align-items: flex-start; justify-content: space-between">
+<button type="button" class="btn btn-quiet" style="height: 60px; width: 124px; padding: 0 22px 0 12px; border-radius: 16px; font-size: 22px; font-weight: 600"><svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"></path></svg><span>Back</span></button>
+<div style="text-align: center; padding-top: 6px"><h1 style="margin: 0; font-size: 26px; line-height: 32px; font-weight: 700">Family favourites</h1><p style="margin: 2px 0 0; font-size: 18px; color: #5E554D">Find the matching photos</p></div>
+<div style="display: flex; gap: 12px">
+<button type="button" class="btn btn-quiet" style="height: 60px; padding: 0 18px 0 14px; border-radius: 16px; font-size: 22px; font-weight: 600"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"></path><path d="M10 21h4"></path><path d="M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1.1 2.2h5c.1-1 .5-1.7 1.1-2.2A6 6 0 0 0 12 3z"></path></svg><span>Hint</span></button>
+<button type="button" class="btn btn-quiet" style="height: 60px; padding: 0 18px 0 14px; border-radius: 16px; font-size: 22px; font-weight: 600"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"></path><path d="M3 4v5h5"></path></svg><span>Restart</span></button>
+</div>
+</header>
+<main style="position: absolute; left: 32px; right: 32px; top: 120px; bottom: 32px; display: flex; align-items: center; justify-content: center">
+<div style="display: grid; grid-template-columns: repeat(4, 177px); gap: 16px">
+<sc-for list="{{cards}}" as="c" hint-placeholder-count="20">
+<button type="button" class="card" aria-label="{{c.label}}" style="width: 177px; height: 192px">
+<sc-if value="{{c.down}}" hint-placeholder-val="{{ true }}">
+<span class="face" style="background: #2D5F5D; display: block">
+<span style="position: absolute; inset: 9px; border: 2px solid rgba(244,239,231,.45); border-radius: 10px; display: flex; align-items: center; justify-content: center">
+<svg aria-hidden="true" width="74" height="63" viewBox="0 0 104 88" fill="none" stroke="#F4EFE7" stroke-width="3.5" stroke-linejoin="round"><rect x="8" y="14" width="54" height="62" rx="6" transform="rotate(-9 35 45)" opacity=".55"></rect><rect x="40" y="10" width="54" height="62" rx="6" transform="rotate(8 67 41)"></rect><path d="M67 52c-7-5-11-9-11-13.5a5.5 5.5 0 0 1 11-1.5 5.5 5.5 0 0 1 11 1.5C78 43 74 47 67 52z" fill="#F4EFE7"></path></svg>
+</span>
+</span>
+</sc-if>
+<sc-if value="{{c.up}}" hint-placeholder-val="{{ false }}">
+<span class="face" style="background: #FFFDF9; padding: 7px; box-sizing: border-box; display: block; box-shadow: {{c.ring}}">
+<img src="{{c.src}}" alt="" style="display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 10px">
+<sc-if value="{{c.matched}}" hint-placeholder-val="{{ false }}">
+<span style="position: absolute; top: 12px; right: 12px; width: 36px; height: 36px; border-radius: 18px; background: #2D5F5D; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 3px #FFFDF9"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span>
+</sc-if>
+</span>
+</sc-if>
+</button>
+</sc-for>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":820,"height":1180}}'>
+var P = {
+  beach: '../assets/demo-photos/beach.svg', boat: '../assets/demo-photos/boat.svg', fish: '../assets/demo-photos/fish.svg',
+  dog: '../assets/demo-photos/dog.svg', ute: '../assets/demo-photos/ute.svg', roses: '../assets/demo-photos/roses.svg',
+  lighthouse: '../assets/demo-photos/lighthouse.svg', cake: '../assets/demo-photos/cake.svg', caravan: '../assets/demo-photos/caravan.svg', kite: '../assets/demo-photos/kite.svg'
+};
+// state per card: d = face down, m = matched, p = picked (first card), s = second card (just turned)
+var LAYOUT = [
+  ['kite', 'd'], ['dog', 'm'], ['cake', 'd'], ['boat', 'd'],
+  ['roses', 'p'], ['fish', 'd'], ['beach', 'm'], ['ute', 'd'],
+  ['caravan', 'd'], ['dog', 'm'], ['lighthouse', 'd'], ['cake', 'd'],
+  ['boat', 'd'], ['lighthouse', 'd'], ['fish', 'd'], ['kite', 'd'],
+  ['ute', 'd'], ['beach', 'm'], ['caravan', 'd'], ['roses', 'd']
+];
+class Component extends DCLogic {
+  renderVals() {
+    var cards = LAYOUT.map(function (x, i) {
+      var st = x[1];
+      var matched = st === 'm';
+      var ring = st === 'p' ? '0 0 0 5px #A86B14, 0 10px 24px rgba(42,37,33,.18)' : (matched ? 'inset 0 0 0 4px #2D5F5D, 0 6px 18px rgba(42,37,33,.12)' : '0 6px 18px rgba(42,37,33,.12)');
+      return { down: st === 'd', up: st !== 'd', matched: matched, src: P[x[0]], ring: ring, label: st === 'd' ? 'Card ' + (i + 1) + ', face down' : x[0] };
+    });
+    return { cards: cards };
+  }
+}
+</script>
+</body>
+</html>

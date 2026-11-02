@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<title>Memory game – iPad landscape</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#F4EFE7}
+a{color:#2D5F5D}a:hover{color:#1F4644}
+.btn{font:inherit;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+.btn:focus-visible,.card:focus-visible{outline:4px solid #1F4644;outline-offset:4px}
+.btn-quiet{background:#FFFDF9;color:#2A2521;border:2px solid #D6CBBB}
+.btn-quiet:active{background:#EFE7DA}
+.btn-primary{background:#2D5F5D;color:#FFFFFF;border:2px solid #2D5F5D}
+.btn-primary:active{background:#1F4644}
+.card{position:relative;border:0;padding:0;margin:0;background:none;cursor:pointer;border-radius:18px;perspective:1400px;-webkit-tap-highlight-color:transparent;transition:transform 200ms ease-out, box-shadow 200ms ease-out}
+.card[disabled]{cursor:default}
+.card-inner{position:absolute;inset:0;transform-style:preserve-3d;transition:transform 420ms cubic-bezier(.2,.7,.2,1)}
+.card.is-up .card-inner{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;border-radius:18px;overflow:hidden;-webkit-backface-visibility:hidden;backface-visibility:hidden;box-shadow:0 1px 0 rgba(42,37,33,.06),0 6px 18px rgba(42,37,33,.12)}
+.face-front{transform:rotateY(180deg);background:#FFFDF9;padding:8px;box-sizing:border-box}
+.corner{position:absolute;width:24px;height:24px}
+.card.is-picked{transform:translateY(-4px)}
+.card.is-picked .face-front{box-shadow:0 0 0 5px #A86B14,0 10px 24px rgba(42,37,33,.18)}
+.card.is-matched .face-front{box-shadow:inset 0 0 0 4px #2D5F5D,0 6px 18px rgba(42,37,33,.12)}
+.card.is-hint{animation:hintPulse 1300ms ease-in-out 0s 3}
+@keyframes hintPulse{0%,100%{box-shadow:0 0 0 0 rgba(168,107,20,0)}50%{box-shadow:0 0 0 12px rgba(168,107,20,.45)}}
+.badge{position:absolute;top:14px;right:14px;width:40px;height:40px;border-radius:20px;background:#2D5F5D;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px #FFFDF9}
+.overlay{animation:fadeUp 320ms cubic-bezier(.2,.7,.2,1)}
+@keyframes fadeUp{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
+.auto-fill{animation:autoFill 6000ms linear forwards}
+@keyframes autoFill{from{width:0}to{width:100%}}
+.rm .card,.rm .card.is-picked{transform:none}
+.rm .card-inner,.rm .card.is-up .card-inner{transform:none;transition:none}
+.rm .face{transition:opacity 220ms linear}
+.rm .face-front{transform:none;opacity:0}
+.rm .card.is-up .face-front{opacity:1}
+.rm .card.is-up .face-back{opacity:0}
+.rm .card.is-hint{animation:none;box-shadow:0 0 0 6px #A86B14}
+.rm .overlay{animation:fadeIn 200ms linear}
+.rm .auto-fill{animation:none;width:0}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion: reduce){
+.card,.card.is-picked{transform:none}
+.card-inner,.card.is-up .card-inner{transform:none;transition:none}
+.face{transition:opacity 220ms linear}
+.face-front{transform:none;opacity:0}
+.card.is-up .face-front{opacity:1}
+.card.is-up .face-back{opacity:0}
+.card.is-hint{animation:none;box-shadow:0 0 0 6px #A86B14}
+.overlay{animation:fadeIn 200ms linear}
+.auto-fill{animation:none;width:0}
+}
+</style>
+</helmet>
+<div class="{{rootClass}}" style="width: 1180px; height: 820px; position: relative; overflow: hidden; background: #F4EFE7; color: #2A2521; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; box-sizing: border-box">
+
+<header style="height: 108px; padding: 24px 40px 0; box-sizing: border-box; display: flex; align-items: flex-start; justify-content: space-between; gap: 24px">
+<a href="Difficulty.dc.html" class="btn btn-quiet" style="height: 60px; min-width: 132px; padding: 0 26px 0 16px; border-radius: 16px; font-size: 22px; font-weight: 600">
+<svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"></path></svg>
+<span>Back</span>
+</a>
+<div style="display: flex; flex-direction: column; align-items: center; padding-top: 6px">
+<h1 style="margin: 0; font-size: 28px; line-height: 34px; font-weight: 700; letter-spacing: -0.2px">Family favourites</h1>
+<p role="status" style="margin: 2px 0 0; font-size: 18px; line-height: 24px; color: #5E554D">{{subtitle}}</p>
+</div>
+<sc-if value="{{peeking}}" hint-placeholder-val="{{ false }}">
+<button type="button" class="btn btn-primary" onClick="{{endPeek}}" style="height: 60px; min-width: 280px; padding: 0 28px; border-radius: 16px; font-size: 22px; font-weight: 700">I’m ready</button>
+</sc-if>
+<sc-if value="{{notPeeking}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; gap: 16px">
+<button type="button" class="btn btn-quiet" onClick="{{showHint}}" style="height: 60px; min-width: 124px; padding: 0 24px 0 18px; border-radius: 16px; font-size: 22px; font-weight: 600">
+<svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"></path><path d="M10 21h4"></path><path d="M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1.1 2.2h5c.1-1 .5-1.7 1.1-2.2A6 6 0 0 0 12 3z"></path></svg>
+<span>Hint</span>
+</button>
+<button type="button" class="btn btn-quiet" onClick="{{askRestart}}" style="height: 60px; min-width: 140px; padding: 0 24px 0 18px; border-radius: 16px; font-size: 22px; font-weight: 600">
+<svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"></path><path d="M3 4v5h5"></path></svg>
+<span>Restart</span>
+</button>
+</div>
+</sc-if>
+</header>
+
+<main style="position: absolute; left: 40px; right: 40px; top: 120px; height: 676px; display: flex; align-items: center; justify-content: center">
+<div style="display: grid; grid-template-columns: repeat({{cols}}, {{cardW}}px); gap: {{gap}}px">
+<sc-for list="{{cards}}" as="c" hint-placeholder-count="12">
+<button type="button" class="{{c.cls}}" onClick="{{c.flip}}" disabled="{{c.matched}}" aria-label="{{c.label}}" style="width: {{cardW}}px; height: {{cardH}}px">
+<span class="card-inner">
+<span class="face face-back" aria-hidden="true" style="display: block; background: #2D5F5D">
+<span style="position: absolute; inset: 10px; border: 2px solid rgba(244,239,231,.45); border-radius: 12px; display: flex; align-items: center; justify-content: center">
+<svg width="{{motifW}}" height="{{motifH}}" viewBox="0 0 104 88" fill="none" stroke="#F4EFE7" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+<rect x="8" y="14" width="54" height="62" rx="6" transform="rotate(-9 35 45)" opacity=".55"></rect>
+<rect x="40" y="10" width="54" height="62" rx="6" transform="rotate(8 67 41)"></rect>
+<path d="M67 52c-7-5-11-9-11-13.5a5.5 5.5 0 0 1 11-1.5 5.5 5.5 0 0 1 11 1.5C78 43 74 47 67 52z" fill="#F4EFE7"></path>
+</svg>
+</span>
+<svg class="corner" style="left: 10px; top: 10px" viewBox="0 0 24 24"><path d="M0 0h24L0 24z" fill="rgba(244,239,231,.35)"></path></svg>
+<svg class="corner" style="right: 10px; top: 10px" viewBox="0 0 24 24"><path d="M24 0H0l24 24z" fill="rgba(244,239,231,.35)"></path></svg>
+<svg class="corner" style="left: 10px; bottom: 10px" viewBox="0 0 24 24"><path d="M0 24h24L0 0z" fill="rgba(244,239,231,.35)"></path></svg>
+<svg class="corner" style="right: 10px; bottom: 10px" viewBox="0 0 24 24"><path d="M24 24H0L24 0z" fill="rgba(244,239,231,.35)"></path></svg>
+</span>
+<span class="face face-front" aria-hidden="true" style="display: block">
+<img src="{{c.src}}" alt="" style="display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; border-radius: 12px">
+<sc-if value="{{c.matched}}" hint-placeholder-val="{{ false }}">
+<span class="badge"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span>
+</sc-if>
+</span>
+</span>
+</button>
+</sc-for>
+</div>
+</main>
+
+<sc-if value="{{moment}}" hint-placeholder-val="{{ false }}">
+<div class="overlay" role="dialog" aria-modal="true" aria-label="Pair found" style="position: absolute; inset: 0; background: rgba(244,239,231,.97); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; padding: 32px; box-sizing: border-box">
+<div style="background: #FFFDF9; padding: 14px; border-radius: 10px; box-shadow: 0 2px 0 rgba(42,37,33,.06), 0 18px 48px rgba(42,37,33,.18)">
+<img src="{{moment.src}}" alt="{{moment.caption}}" style="display: block; max-width: 900px; max-height: 500px; width: auto; height: auto; border-radius: 4px">
+</div>
+<p style="margin: 0; font-size: 32px; line-height: 40px; font-weight: 600; text-align: center; max-width: 900px">{{moment.caption}}</p>
+<div style="display: flex; gap: 16px; align-items: center">
+<sc-if value="{{readAloud}}" hint-placeholder-val="{{ false }}">
+<button type="button" class="btn btn-quiet" onClick="{{speak}}" style="height: 72px; padding: 0 28px 0 22px; border-radius: 20px; font-size: 24px; font-weight: 600">
+<svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"></path><path d="M16.5 8.5a5 5 0 0 1 0 7"></path><path d="M19 6a8.5 8.5 0 0 1 0 12"></path></svg>
+<span>Read aloud</span>
+</button>
+</sc-if>
+<button type="button" class="btn btn-primary" onClick="{{closeMoment}}" style="height: 72px; min-width: 260px; padding: 0 40px; border-radius: 20px; font-size: 26px; font-weight: 700">Keep playing</button>
+</div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px">
+<div aria-hidden="true" style="width: 220px; height: 6px; border-radius: 3px; background: #E3D9CA; overflow: hidden"><div class="auto-fill" style="height: 6px; background: #8FA9A7"></div></div>
+<p style="margin: 0; font-size: 18px; color: #5E554D">Carries on by itself</p>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{done}}" hint-placeholder-val="{{ false }}">
+<div class="overlay" role="dialog" aria-modal="true" aria-label="Round complete" style="position: absolute; inset: 0; background: #F4EFE7; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px; padding: 40px; box-sizing: border-box">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 6px">
+<svg aria-hidden="true" width="48" height="48" viewBox="0 0 24 24" fill="#A86B14"><path d="M12 21c-5-3.6-9-7.2-9-11.2A4.8 4.8 0 0 1 12 7a4.8 4.8 0 0 1 9 2.8c0 4-4 7.6-9 11.2z"></path></svg>
+<h2 style="margin: 0; font-size: 40px; line-height: 48px; font-weight: 700">You found every pair</h2>
+<p style="margin: 0; font-size: 22px; color: #5E554D">{{doneLine}}</p>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 18px; justify-content: center; align-items: center; padding: 16px 0; max-width: 1000px">
+<sc-for list="{{collage}}" as="p" hint-placeholder-count="6">
+<div style="background: #FFFDF9; padding: 8px 8px 26px; border-radius: 6px; box-shadow: 0 10px 28px rgba(42,37,33,.16); transform: rotate({{p.rot}}deg)">
+<img src="{{p.src}}" alt="{{p.caption}}" style="display: block; width: {{collageW}}px; height: {{collageH}}px; object-fit: cover; border-radius: 3px">
+</div>
+</sc-for>
+</div>
+<div style="display: flex; gap: 16px">
+<a href="Home.dc.html" class="btn btn-quiet" style="height: 72px; padding: 0 32px; border-radius: 20px; font-size: 24px; font-weight: 600">Choose another album</a>
+<button type="button" class="btn btn-primary" onClick="{{playAgain}}" style="height: 72px; min-width: 240px; padding: 0 40px; border-radius: 20px; font-size: 26px; font-weight: 700">Play again</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{confirm}}" hint-placeholder-val="{{ false }}">
+<div class="overlay" style="position: absolute; inset: 0; background: rgba(42,37,33,.45); display: flex; align-items: center; justify-content: center">
+<div role="dialog" aria-modal="true" aria-labelledby="restart-title" style="width: 560px; background: #FFFDF9; border-radius: 24px; padding: 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 24px 64px rgba(42,37,33,.3)">
+<h2 id="restart-title" style="margin: 0; font-size: 30px; line-height: 38px; font-weight: 700">Start this round again?</h2>
+<p style="margin: 0 0 16px; font-size: 22px; line-height: 30px; color: #5E554D">The cards will be shuffled and turned face down.</p>
+<div style="display: flex; gap: 16px">
+<button type="button" class="btn btn-quiet" onClick="{{cancelRestart}}" style="flex: 1; height: 68px; border-radius: 18px; font-size: 22px; font-weight: 600">Keep playing</button>
+<button type="button" class="btn btn-primary" onClick="{{doRestart}}" style="flex: 1; height: 68px; border-radius: 18px; font-size: 22px; font-weight: 700">Start again</button>
+</div>
+</div>
+</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"startFrom":{"editor":"enum","options":["Mid-game","New round"],"default":"Mid-game","section":"Prototype"},"pairs":{"editor":"enum","options":["3","6","8","10"],"default":"6","section":"Prototype"},"peek":{"editor":"boolean","default":true,"section":"Settings"},"mismatchDelay":{"editor":"enum","options":["Short","Medium","Long"],"default":"Medium","section":"Settings"},"readAloud":{"editor":"boolean","default":false,"section":"Settings"},"reducedMotion":{"editor":"boolean","default":false,"section":"Settings"},"$preview":{"width":1180,"height":820}}'>
+var PHOTOS = {
+  beach: { src: '../assets/demo-photos/beach.svg', caption: 'Mooloolaba, summer 2019' },
+  boat: { src: '../assets/demo-photos/boat.svg', caption: 'Out on the bay at sunset' },
+  fish: { src: '../assets/demo-photos/fish.svg', caption: 'Dad’s first big snapper' },
+  dog: { src: '../assets/demo-photos/dog.svg', caption: 'Biscuit, aged two' },
+  ute: { src: '../assets/demo-photos/ute.svg', caption: 'The blue ute, 1986' },
+  roses: { src: '../assets/demo-photos/roses.svg', caption: 'Mum’s roses by the back fence' },
+  lighthouse: { src: '../assets/demo-photos/lighthouse.svg', caption: 'The lighthouse walk' },
+  cake: { src: '../assets/demo-photos/cake.svg', caption: 'Seventieth birthday cake' },
+  caravan: { src: '../assets/demo-photos/caravan.svg', caption: 'Camping at the national park' },
+  kite: { src: '../assets/demo-photos/kite.svg', caption: 'Flying kites on the headland' }
+};
+var ALL = ['beach', 'boat', 'fish', 'dog', 'ute', 'roses', 'lighthouse', 'cake', 'caravan', 'kite'];
+var MID_ORDER = ['boat', 'dog', 'roses', 'ute', 'beach', 'fish', 'dog', 'boat', 'roses', 'beach', 'ute', 'fish'];
+var DELAYS = { Short: 1200, Medium: 2000, Long: 3200 };
+var ROTS = [-4, 3, -2, 4, -3, 2, -1, 3, -4, 2];
+// Landscape grid rules: cards -> [cols, rows]
+var GRID = { 6: [3, 2], 12: [4, 3], 16: [4, 4], 20: [5, 4] };
+var AREA_W = 1100, AREA_H = 676, MAX_RATIO = 1.25;
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.timers = [];
+    this.state = this.initial(props.startFrom || 'Mid-game');
+  }
+  pairCount() { return parseInt(this.props.pairs || '6', 10) || 6; }
+  shuffled(n) {
+    var keys = ALL.slice(0, n);
+    var list = keys.concat(keys);
+    for (var i = list.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = list[i]; list[i] = list[j]; list[j] = t;
+    }
+    return list.map(function (k) { return { pair: k, up: false, matched: false }; });
+  }
+  initial(mode) {
+    var n = this.pairCount();
+    var base = { first: null, lock: false, moment: null, hint: null, confirm: false, done: false, found: [], peeking: false, peekLeft: 0 };
+    if (mode === 'New round') { base.cards = this.shuffled(n); return base; }
+    if (n === 6) {
+      base.cards = MID_ORDER.map(function (k) { var m = k === 'beach' || k === 'dog'; return { pair: k, up: m, matched: m }; });
+      base.cards[0].up = true; base.first = 0; base.found = ['beach', 'dog'];
+      return base;
+    }
+    base.cards = this.shuffled(n);
+    var done = [ALL[0], ALL[3]];
+    base.cards.forEach(function (c) { if (done.indexOf(c.pair) >= 0) { c.up = true; c.matched = true; } });
+    for (var i = 0; i < base.cards.length; i++) { if (!base.cards[i].matched) { base.cards[i].up = true; base.first = i; break; } }
+    base.found = done;
+    return base;
+  }
+  later(fn, ms) { var id = setTimeout(fn, ms); this.timers.push(id); return id; }
+  clearAll() { this.timers.forEach(function (t) { clearTimeout(t); }); this.timers = []; }
+  componentDidMount() { if ((this.props.startFrom || 'Mid-game') === 'New round') this.startPeek(); }
+  componentWillUnmount() { this.clearAll(); }
+  componentDidUpdate(prev) {
+    var p = this.props;
+    if (prev.startFrom !== p.startFrom || prev.pairs !== p.pairs || prev.peek !== p.peek) {
+      this.clearAll();
+      this.setState(this.initial(p.startFrom || 'Mid-game'));
+      if ((p.startFrom || 'Mid-game') === 'New round') this.startPeek();
+    }
+  }
+  startPeek() {
+    if (this.props.peek === false) return;
+    var self = this;
+    this.setState({ peeking: true, peekLeft: 5 });
+    [4, 3, 2, 1].forEach(function (left, n) { self.later(function () { self.setState({ peekLeft: left }); }, (n + 1) * 1000); });
+    this.later(function () { self.endPeek(); }, 5000);
+  }
+  endPeek() { this.clearAll(); this.setState({ peeking: false, peekLeft: 0 }); }
+  flip(i) {
+    var s = this.state;
+    if (s.lock || s.moment || s.done || s.confirm || s.peeking) return;
+    var c = s.cards[i];
+    if (c.up || c.matched) return;
+    var cards = s.cards.map(function (x) { return Object.assign({}, x); });
+    cards[i].up = true;
+    if (s.first === null) { this.setState({ cards: cards, first: i, hint: null }); return; }
+    var j = s.first, self = this;
+    if (cards[j].pair === cards[i].pair) {
+      cards[i].matched = true; cards[j].matched = true;
+      var key = cards[i].pair;
+      this.setState({ cards: cards, first: null, lock: true, hint: null, found: s.found.concat([key]) });
+      this.later(function () {
+        self.setState({ moment: key, lock: false });
+        self.autoId = self.later(function () { self.closeMoment(); }, 6000);
+      }, 650);
+    } else {
+      this.setState({ cards: cards, first: null, lock: true, hint: null });
+      var wait = DELAYS[this.props.mismatchDelay || 'Medium'] || 2000;
+      this.later(function () {
+        var back = self.state.cards.map(function (x, n) { var y = Object.assign({}, x); if ((n === i || n === j) && !y.matched) y.up = false; return y; });
+        self.setState({ cards: back, lock: false });
+      }, wait);
+    }
+  }
+  closeMoment() {
+    if (!this.state.moment) return;
+    if (this.autoId) clearTimeout(this.autoId);
+    var all = this.state.cards.every(function (x) { return x.matched; });
+    this.setState({ moment: null, done: all });
+  }
+  showHint() {
+    var s = this.state;
+    if (s.moment || s.done || s.lock || s.peeking) return;
+    var key = null;
+    if (s.first !== null) key = s.cards[s.first].pair;
+    else { var open = s.cards.filter(function (x) { return !x.matched; }); if (open.length) key = open[0].pair; }
+    if (!key) return;
+    var self = this;
+    this.setState({ hint: null });
+    this.later(function () { self.setState({ hint: key }); }, 30);
+    this.later(function () { if (self.state.hint === key) self.setState({ hint: null }); }, 4000);
+  }
+  restart() { this.clearAll(); this.setState(this.initial('New round')); this.startPeek(); }
+  renderVals() {
+    var s = this.state, self = this;
+    var count = s.cards.length;
+    var g = GRID[count] || [4, 3];
+    var gap = count <= 12 ? 20 : 16;
+    var cellW = (AREA_W - (g[0] - 1) * gap) / g[0];
+    var cellH = (AREA_H - (g[1] - 1) * gap) / g[1];
+    var cardW = Math.floor(Math.min(cellW, cellH * MAX_RATIO));
+    var cardH = Math.floor(Math.min(cellH, cellW * MAX_RATIO));
+    var motifW = Math.round(Math.min(104, cardW * 0.42));
+    var cards = s.cards.map(function (c, i) {
+      var up = c.up || c.matched || s.peeking;
+      var cls = 'card';
+      if (up) cls += ' is-up';
+      if (c.matched) cls += ' is-matched';
+      if (i === s.first) cls += ' is-picked';
+      if (s.hint === c.pair && !c.matched) cls += ' is-hint';
+      var p = PHOTOS[c.pair];
+      var label = c.matched ? 'Matched: ' + p.caption : (up ? 'Turned over: ' + p.caption : 'Card ' + (i + 1) + ', face down');
+      return { cls: cls, src: p.src, matched: c.matched, label: label, flip: function () { self.flip(i); } };
+    });
+    var moment = s.moment ? PHOTOS[s.moment] : null;
+    var found = s.found.length ? s.found : ALL.slice(0, count / 2);
+    var big = found.length <= 6;
+    var collage = found.map(function (k, n) { return { src: PHOTOS[k].src, caption: PHOTOS[k].caption, rot: ROTS[n % ROTS.length] }; });
+    var words = ['', '', '', 'Three', '', '', 'Six', '', 'Eight', '', 'Ten'];
+    return {
+      rootClass: this.props.reducedMotion ? 'rm' : '',
+      cols: g[0], gap: gap, cardW: cardW, cardH: cardH, motifW: motifW, motifH: Math.round(motifW * 88 / 104),
+      cards: cards,
+      peeking: s.peeking, notPeeking: !s.peeking,
+      subtitle: s.peeking ? 'Have a good look — turning over in ' + s.peekLeft : 'Find the matching photos',
+      moment: moment, done: s.done, confirm: s.confirm, collage: collage,
+      collageW: big ? 150 : 120, collageH: big ? 130 : 104,
+      doneLine: (words[count / 2] || String(count / 2)) + ' lovely memories from Family favourites',
+      readAloud: !!this.props.readAloud,
+      endPeek: function () { self.endPeek(); },
+      showHint: function () { self.showHint(); },
+      askRestart: function () { if (!s.moment && !s.done) self.setState({ confirm: true }); },
+      cancelRestart: function () { self.setState({ confirm: false }); },
+      doRestart: function () { self.restart(); },
+      closeMoment: function () { self.closeMoment(); },
+      speak: function () { try { if (moment && window.speechSynthesis) { window.speechSynthesis.cancel(); window.speechSynthesis.speak(new SpeechSynthesisUtterance(moment.caption)); } } catch (e) {} },
+      playAgain: function () { self.restart(); }
+    };
+  }
+}
+</script>
+</body>
+</html>

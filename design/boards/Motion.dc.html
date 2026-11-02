@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<title>Motion spec</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#FFFDF9}
+.lbl{margin:0;font-size:15px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#5E554D}
+table{border-collapse:collapse;width:100%}
+th,td{text-align:left;padding:12px 12px;border-bottom:1px solid #E3D9CA;font-size:16px;line-height:23px;vertical-align:top}
+th{font-size:13px;color:#5E554D;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:14px;background:#F4EFE7;padding:1px 5px;border-radius:5px}
+.btn{font:inherit;cursor:pointer;height:52px;padding:0 20px;border-radius:14px;background:#FFFDF9;color:#2A2521;border:2px solid #D6CBBB;font-size:18px;font-weight:600}
+.btn:focus-visible{outline:4px solid #1F4644;outline-offset:3px}
+.dcard{position:relative;width:200px;height:166px;perspective:1400px}
+.dinner{position:absolute;inset:0;transform-style:preserve-3d;transition:transform 420ms cubic-bezier(.2,.7,.2,1)}
+.up .dinner{transform:rotateY(180deg)}
+.dface{position:absolute;inset:0;border-radius:16px;overflow:hidden;-webkit-backface-visibility:hidden;backface-visibility:hidden;box-shadow:0 6px 18px rgba(42,37,33,.12)}
+.dfront{transform:rotateY(180deg);background:#FFFDF9;padding:7px;box-sizing:border-box}
+.hint{animation:hp 1300ms ease-in-out 0s 3;border-radius:16px}
+@keyframes hp{0%,100%{box-shadow:0 0 0 0 rgba(168,107,20,0)}50%{box-shadow:0 0 0 12px rgba(168,107,20,.45)}}
+.matched .dfront{box-shadow:inset 0 0 0 4px #2D5F5D,0 6px 18px rgba(42,37,33,.12)}
+.badge{position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:17px;background:#2D5F5D;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px #FFFDF9;animation:pop 240ms ease-out}
+@keyframes pop{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:none}}
+.rm .dinner,.rm .up .dinner{transform:none;transition:none}
+.rm .dface{transition:opacity 220ms linear}
+.rm .dfront{transform:none;opacity:0}
+.rm .up .dfront{opacity:1}
+.rm .up .dback{opacity:0}
+.rm .hint{animation:none;box-shadow:0 0 0 6px #A86B14}
+.rm .badge{animation:fd 220ms linear}
+@keyframes fd{from{opacity:0}to{opacity:1}}
+</style>
+</helmet>
+<div style="width: 1280px; height: 1500px; background: #FFFDF9; color: #2A2521; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; padding: 56px; box-sizing: border-box; display: flex; flex-direction: column; gap: 32px">
+<header>
+<h1 style="margin: 0; font-size: 40px; line-height: 48px">Motion</h1>
+<p style="margin: 6px 0 0; font-size: 18px; line-height: 27px; color: #5E554D; max-width: 940px">Slow, soft and never startling. Nothing shakes, bounces or flashes. Every move has a still version for reduced motion: it switches with <code>prefers-reduced-motion</code>, using the same timings without the movement.</p>
+</header>
+
+<section class="{{demoClass}}" style="background: #F4EFE7; border-radius: 20px; padding: 24px; display: flex; gap: 32px; align-items: center">
+<div class="{{cardClass}}">
+<div class="dcard {{upClass}}">
+<div class="dinner">
+<div class="dface dback" style="background: #2D5F5D"><div style="position: absolute; inset: 10px; border: 2px solid rgba(244,239,231,.45); border-radius: 10px"></div></div>
+<div class="dface dfront"><img src="../assets/demo-photos/dog.svg" alt="" style="display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 10px">
+<sc-if value="{{matched}}" hint-placeholder-val="{{ false }}"><span class="badge"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span></sc-if>
+</div>
+</div>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; gap: 10px; flex-wrap: wrap">
+<button type="button" class="btn" onClick="{{flip}}">Flip</button>
+<button type="button" class="btn" onClick="{{hint}}">Hint pulse</button>
+<button type="button" class="btn" onClick="{{match}}">Match</button>
+<button type="button" class="btn" onClick="{{reset}}">Reset</button>
+</div>
+<label style="display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 600"><input type="checkbox" checked="{{rm}}" onChange="{{toggleRm}}" style="width: 24px; height: 24px; accent-color: #2D5F5D">Show the reduced-motion version</label>
+</div>
+</section>
+
+<table>
+<thead><tr><th style="width: 170px">Moment</th><th>Full motion</th><th style="width: 200px">Timing</th><th>Reduced motion</th></tr></thead>
+<tbody>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="10"><tr><td style="font-weight: 700">{{r.a}}</td><td>{{r.b}}</td><td><code>{{r.c}}</code></td><td style="color: #5E554D">{{r.d}}</td></tr></sc-for>
+</tbody>
+</table>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1500}}'>
+var ROWS = [
+  ['Card press', 'First card lifts 4 px and gets the --pick ring.', '200ms ease-out', 'Ring only, no lift.'],
+  ['Card flip', 'Turns over on the Y axis around its centre, perspective 1400 px. Taps on other cards are ignored until it lands.', '420ms cubic-bezier(.2,.7,.2,1)', 'Cross-fade back → face, 220ms linear.'],
+  ['Match', 'After the 2nd flip lands: ring + tick badge fade in from 80% scale. The match moment opens 650 ms after the tap.', '240ms ease-out · +650ms', 'Ring and badge fade in, 220ms.'],
+  ['Not a match', 'Both cards stay face up for the hold time, then turn back together. No colour change, shake or sound.', 'hold 1200 / 2000 / 3200 · 420ms flip', 'Same hold, then fade, 220ms.'],
+  ['Hint', 'Soft --pick glow grows 0 → 12 px and back on both cards of one pair, three times, then stops.', '1300ms ease-in-out × 3', 'Steady 6 px ring for 4 s.'],
+  ['Peek at start', 'All cards turn up together, stay for 5 s with a countdown in the top bar, then turn down left to right.', '420ms · 5000ms · 30ms stagger', 'All fade together, no stagger.'],
+  ['Match moment', 'Scrim and photo fade up from 97% scale. A thin bar fills over 6 s, then it closes by itself.', '320ms ease-out · 6000ms linear', 'Fade 200ms. No bar: just “Carries on by itself”.'],
+  ['Round complete', 'Overlay fades up; collage photos drop in one by one and settle at their tilt.', '320ms · 400ms each · 80ms stagger', 'Everything fades in together, 220ms.'],
+  ['Dialogs, banner', 'Dialog fades up from 97%. Update banner slides down 16 px.', '320ms ease-out', 'Fade only, 200ms.'],
+  ['Unlock hold', 'Ring fills while the finger is down; resets if let go early.', '2000ms linear (tied to the press)', 'Unchanged: it shows progress, not decoration.']
+];
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { up: false, hint: 0, matched: false, rm: false }; }
+  renderVals() {
+    var s = this.state, self = this;
+    return {
+      rows: ROWS.map(function (r) { return { a: r[0], b: r[1], c: r[2], d: r[3] }; }),
+      demoClass: s.rm ? 'rm' : '', upClass: s.up ? 'up' : '', cardClass: s.hint % 2 ? 'hint' : '',
+      matched: s.matched, rm: s.rm,
+      flip: function () { self.setState({ up: !s.up, matched: false }); },
+      hint: function () { self.setState({ up: false, matched: false, hint: 0 }); setTimeout(function () { self.setState({ hint: 1 }); }, 30); },
+      match: function () { self.setState({ up: true, matched: false }); setTimeout(function () { self.setState({ matched: true }); }, 450); },
+      reset: function () { self.setState({ up: false, matched: false, hint: 0 }); },
+      toggleRm: function () { self.setState({ rm: !s.rm }); }
+    };
+  }
+}
+</script>
+</body>
+</html>
