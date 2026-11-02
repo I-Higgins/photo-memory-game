@@ -123,7 +123,15 @@ export async function playToEnd(page) {
     if (done.has(i) || round.cards[i].matched) continue;
     const j = round.cards.findIndex((c, k) => k !== i && c.photoId === round.cards[i].photoId);
     done.add(i); done.add(j);
-    await page.locator(`.card[data-i="${i}"]`).click();
+    const first = page.locator(`.card[data-i="${i}"]`);
+    await first.click();
+    try {
+      await page.waitForSelector(`.card[data-i="${i}"].is-up`, { timeout: 2000 });
+    } catch {
+      console.warn(`[e2e] first tap on card ${i} did not turn it over; tapping again`);
+      await first.click();
+      await page.waitForSelector(`.card[data-i="${i}"].is-up`, { timeout: 2000 });
+    }
     await page.waitForTimeout(300);
     await page.locator(`.card[data-i="${j}"]`).click();
     const keep = page.getByRole('button', { name: 'Keep playing' });
