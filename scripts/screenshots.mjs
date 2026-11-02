@@ -137,12 +137,14 @@ async function ipad(theme, w = 1180, h = 820) {
   await ctx.close();
 }
 
-await ipad(null);
-await ipad('dark');
-await ipad('contrast');
-await ipad(null, 820, 1180);
-await ipad(null, 768, 1024);
-await ipad(null, 390, 844);
+if (!process.env.README_ONLY) {
+  await ipad(null);
+  await ipad('dark');
+  await ipad('contrast');
+  await ipad(null, 820, 1180);
+  await ipad(null, 768, 1024);
+  await ipad(null, 390, 844);
+}
 
 // README screenshot: starter-pack art only
 {
