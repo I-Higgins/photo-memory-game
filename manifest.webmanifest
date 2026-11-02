@@ -1,0 +1,18 @@
+{
+  "name": "Photo Pairs",
+  "short_name": "Photo Pairs",
+  "description": "A gentle match-the-pairs memory game with your own family photos. Works offline.",
+  "lang": "en-AU",
+  "start_url": "./",
+  "scope": "./",
+  "id": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#F4EFE7",
+  "theme_color": "#F4EFE7",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
