@@ -352,7 +352,7 @@ function restoreFlow(input, nav) {
     } catch (e) {
       if (e && e.name === 'BadBackupError') {
         const again = await confirmDialog({
-          title: 'That file couldn’t be opened', icon: 'photo-error', alert: true,
+          title: 'That file couldn’t be opened', icon: 'file-error', alert: true,
           text: 'It doesn’t look like a Photo Pairs backup, or it may be damaged. Nothing on this iPad was changed.',
           cancel: 'Close', action: 'Choose another file',
         });
@@ -377,7 +377,7 @@ function fullDialog(saved, total) {
   const text = total != null
     ? `We saved ${saved} of ${total} photos. To add more, free up space in the iPad’s Settings, or remove photos you don’t need here.`
     : 'To add more, free up space in the iPad’s Settings, or remove photos you don’t need here.';
-  return confirmDialog({ title: 'The iPad is full', text, cancel: null, action: 'OK', alert: true, icon: 'caption' });
+  return confirmDialog({ title: 'The iPad is full', text, cancel: null, action: 'OK', alert: true, icon: 'storage-full' });
 }
 
 // ---------------------------------------------------------------- album detail

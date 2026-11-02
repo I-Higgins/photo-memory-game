@@ -94,6 +94,14 @@
   --howto-scrim:rgba(42,37,33,.55);
   --panel-line:transparent;
   --border-w:2px;             /* quiet-button border */
+  --knob:#FFFFFF;
+  --shadow-knob:0 1px 3px rgba(0,0,0,.3);
+  --shadow-row:0 1px 0 rgba(42,37,33,.06);
+  --shadow-panel:0 1px 0 rgba(42,37,33,.06),0 4px 14px rgba(42,37,33,.06);
+  --shadow-tile-sm:0 1px 0 rgba(42,37,33,.06),0 4px 12px rgba(42,37,33,.08);
+  --shadow-photo:0 2px 0 rgba(42,37,33,.06),0 18px 48px rgba(42,37,33,.18);
+  --shadow-polaroid:0 10px 28px rgba(42,37,33,.16);
+  --shadow-hold:0 8px 28px rgba(42,37,33,.14);
 }
 [data-theme="dark"]{
   --control-off:#8A8076;
@@ -103,6 +111,8 @@
   --pending-bg:#3A332E; --caption-missing:#B3A89C; --danger-soft:#4A2C26;
   --heart:#E6A94A; --input-bg:#1C1917; --link:#9FD3CE;
   --moment-scrim:rgba(28,25,23,.97); --howto-scrim:rgba(0,0,0,.7);
+  --shadow-row:none; --shadow-panel:none; --shadow-tile-sm:0 4px 12px rgba(0,0,0,.4);
+  --shadow-photo:0 18px 48px rgba(0,0,0,.6); --shadow-polaroid:0 10px 28px rgba(0,0,0,.5); --shadow-hold:0 8px 28px rgba(0,0,0,.5);
 }
 [data-theme="contrast"]{
   --control-off:#4D4D4D;
@@ -113,4 +123,6 @@
   --heart:#7A3E00; --input-bg:#FFFFFF; --link:#003B3A;
   --moment-scrim:rgba(255,255,255,.98); --howto-scrim:rgba(0,0,0,.75);
   --panel-line:#000000; --border-w:3px;
+  --shadow-row:none; --shadow-panel:none; --shadow-tile-sm:none; --shadow-photo:none; --shadow-polaroid:none; --shadow-hold:none;
+  --shadow-knob:0 0 0 2px #000000;
 }

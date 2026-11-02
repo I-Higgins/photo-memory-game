@@ -80,8 +80,9 @@ export async function renderGame(root, nav) {
     </header>
     <div class="board"><div class="grid"></div></div>
     <nav class="game-bottom" aria-label="Game controls" hidden>
-      <button type="button" class="btn btn-quiet btn-player" data-act="hint">${icon('hint', 22)}<span>Hint</span></button>
-      <button type="button" class="btn btn-quiet btn-player" data-act="restart">${icon('restart', 22)}<span>Restart</span></button>
+      <button type="button" class="btn btn-quiet btn-player" data-act="hint" data-tool>${icon('hint', 22)}<span>Hint</span></button>
+      <button type="button" class="btn btn-quiet btn-player" data-act="restart" data-tool>${icon('restart', 22)}<span>Restart</span></button>
+      <button type="button" class="btn btn-primary btn-player" data-act="ready" hidden>I’m ready</button>
     </nav>
   </div>`);
   const grid = view.querySelector('.grid');
@@ -90,7 +91,9 @@ export async function renderGame(root, nav) {
   const sub = view.querySelector('.sub');
   const bottomNav = view.querySelector('.game-bottom');
   const topTools = view.querySelector('[data-top-tools]');
-  const readyBtn = view.querySelector('[data-act="ready"]');
+  const readyTop = bar.querySelector('[data-act="ready"]');
+  const readyBottom = bottomNav.querySelector('[data-act="ready"]');
+  let readyBtn = readyTop;
 
   // ---------- cards ----------
   function buildCards() {
@@ -135,15 +138,18 @@ export async function renderGame(root, nav) {
     const safe = { t: parseFloat(cs.paddingTop) || 0, r: parseFloat(cs.paddingRight) || 0, b: parseFloat(cs.paddingBottom) || 0, l: parseFloat(cs.paddingLeft) || 0 };
     const useBottom = phone && !landscape;
     view.classList.toggle('phone', phone);
-    bottomNav.hidden = !useBottom || peeking;
+    bottomNav.hidden = !useBottom;
+    bottomNav.querySelectorAll('[data-tool]').forEach((b) => { b.hidden = peeking; });
     topTools.hidden = useBottom || peeking;
-    readyBtn.hidden = !peeking;
+    readyTop.hidden = !peeking || useBottom;
+    readyBottom.hidden = !peeking || !useBottom;
+    readyBtn = useBottom ? readyBottom : readyTop;
     const side = phone ? 16 : landscape ? 40 : 32;
     view.style.setProperty('--side', side + 'px');
     const barBottom = bar.getBoundingClientRect().bottom;
     const top = phone ? barBottom + 16 : Math.max(safe.t + 120, barBottom + 12);
     let bottom;
-    if (useBottom) bottom = h - bottomNav.getBoundingClientRect().top + 16;
+    if (useBottom) bottom = safe.b + 4 + 64 + 16; // bottom bar (64) above the home indicator, then 16 clear
     else bottom = safe.b + (phone ? 16 : landscape ? 24 : 32);
     const left = side + safe.l;
     const right = side + safe.r;
@@ -342,7 +348,8 @@ export async function renderGame(root, nav) {
   // ---------- wire up ----------
   view.querySelectorAll('[data-act="hint"]').forEach((b) => b.addEventListener('click', showHint));
   view.querySelectorAll('[data-act="restart"]').forEach((b) => b.addEventListener('click', askRestart));
-  readyBtn.addEventListener('click', endPeek);
+  readyTop.addEventListener('click', endPeek);
+  readyBottom.addEventListener('click', endPeek);
 
   root.replaceChildren(view);
   buildCards();
