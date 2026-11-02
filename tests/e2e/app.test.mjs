@@ -113,7 +113,10 @@ for (const { name, type } of browsers) {
     });
 
     test('loads and plays offline after the first visit', async () => {
-      const { browser, context, page } = await newPage(type, srv.url);
+      // Its own server, which is shut down after the first visit: the site is
+      // genuinely unreachable, so everything must come from the service worker.
+      const own = await server();
+      const { browser, page } = await newPage(type, own.url);
       try {
         await page.evaluate(async () => { await navigator.serviceWorker.ready; });
         await page.reload();
@@ -125,8 +128,8 @@ for (const { name, type } of browsers) {
         });
         assert.ok(cached.controlled, 'page is controlled by the service worker');
         assert.ok(cached.count >= 80, `precache has ${cached.count} entries (${cached.keys})`);
-        await context.setOffline(true);
-        await page.goto(srv.url + '#/');
+        await own.close();
+        await page.goto(own.url + '#/');
         await page.getByRole('heading', { name: 'Pick an album to play' }).waitFor();
         await page.getByRole('link', { name: /Play Cars/ }).click();
         await page.locator('.choice[data-pairs="3"]').click();
@@ -140,7 +143,7 @@ for (const { name, type } of browsers) {
           const state = await page.$$eval('.polaroid img', (imgs) => imgs.map((i) => `${i.src} complete=${i.complete} w=${i.naturalWidth}`));
           assert.fail(`starter pictures did not load from the cache: ${state.join(', ')}`);
         });
-      } finally { await context.setOffline(false).catch(() => {}); await browser.close(); }
+      } finally { await browser.close(); await own.close().catch(() => {}); }
     });
 
     test('back up an album, delete it, restore it', async () => {

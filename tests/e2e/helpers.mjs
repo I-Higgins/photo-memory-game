@@ -23,9 +23,14 @@ export async function availableBrowsers() {
   return out;
 }
 
-export async function server() {
-  const s = await startServer(0);
-  return { url: `http://localhost:${s.address().port}/`, close: () => s.close() };
+export async function server(port = 0) {
+  const s = await startServer(port);
+  return {
+    url: `http://localhost:${s.address().port}/`,
+    port: s.address().port,
+    // Really take the site down: stop listening and drop open keep-alive sockets.
+    close: () => new Promise((ok) => { s.close(() => ok()); s.closeAllConnections(); }),
+  };
 }
 
 export async function newPage(browserType, baseUrl, { viewport = IPAD, settings = {}, init } = {}) {
