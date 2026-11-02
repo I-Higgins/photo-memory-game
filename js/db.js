@@ -1,6 +1,9 @@
 // Small IndexedDB wrapper. Photos never go anywhere else.
 //  albums: { id, name, coverPhotoId, created, updated }
 //  photos: { id, albumId, caption, display: Blob, thumb: Blob, order, added }
+// Images are stored as { buf: ArrayBuffer, type } rather than Blobs: some
+// WebKit builds (and Safari private browsing) refuse Blobs in IndexedDB,
+// while ArrayBuffers work everywhere. Callers always see Blobs.
 
 const DB_NAME = 'photo-pairs';
 const DB_VERSION = 1;
@@ -28,6 +31,22 @@ function open() {
   });
   dbPromise.catch(() => { dbPromise = undefined; });
   return dbPromise;
+}
+
+async function packImage(blob) {
+  if (!blob || !(blob instanceof Blob)) return blob;
+  return { buf: await blob.arrayBuffer(), type: blob.type || 'image/jpeg' };
+}
+function unpackImage(v) {
+  if (!v || v instanceof Blob) return v;
+  return new Blob([v.buf], { type: v.type || 'image/jpeg' });
+}
+async function packPhoto(p) {
+  return { ...p, display: await packImage(p.display), thumb: await packImage(p.thumb) };
+}
+function unpackPhoto(p) {
+  if (!p) return p;
+  return { ...p, display: unpackImage(p.display), thumb: unpackImage(p.thumb) };
 }
 
 function done(tx) {
@@ -96,24 +115,25 @@ export async function listPhotos(albumId, withBlobs = true) {
   const all = await req(db.transaction('photos').objectStore('photos').index('albumId').getAll(albumId));
   all.sort((a, b) => a.order - b.order || a.added - b.added);
   if (!withBlobs) return all.map(({ display, thumb, ...rest }) => rest); // eslint-disable-line no-unused-vars
-  return all;
+  return all.map(unpackPhoto);
 }
 
 export async function getPhoto(id) {
   const db = await open();
-  return req(db.transaction('photos').objectStore('photos').get(id));
+  return unpackPhoto(await req(db.transaction('photos').objectStore('photos').get(id)));
 }
 
 export async function getPhotos(ids) {
   const db = await open();
   const store = db.transaction('photos').objectStore('photos');
-  return Promise.all(ids.map((id) => req(store.get(id))));
+  return (await Promise.all(ids.map((id) => req(store.get(id))))).map(unpackPhoto);
 }
 
 export async function putPhoto(photo) {
+  const packed = await packPhoto(photo); // before opening the transaction
   const db = await open();
   const tx = db.transaction('photos', 'readwrite');
-  tx.objectStore('photos').put(photo);
+  tx.objectStore('photos').put(packed);
   await done(tx);
 }
 

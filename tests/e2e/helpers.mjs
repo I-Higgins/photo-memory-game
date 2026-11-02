@@ -122,7 +122,17 @@ export async function playToEnd(page) {
     await page.waitForTimeout(300);
     await page.locator(`.card[data-i="${j}"]`).click();
     const keep = page.getByRole('button', { name: 'Keep playing' });
-    await keep.waitFor({ timeout: 5000 });
+    try {
+      await keep.waitFor({ timeout: 8000 });
+    } catch {
+      const state = await page.evaluate(() => ({
+        hash: location.hash,
+        up: [...document.querySelectorAll('.card.is-up')].map((c) => c.dataset.i),
+        matched: [...document.querySelectorAll('.card.is-matched')].map((c) => c.dataset.i),
+        overlays: [...document.querySelectorAll('.overlay, .scrim, .banner')].map((o) => o.className + ': ' + o.innerText.slice(0, 80)),
+      }));
+      throw new Error(`No match moment after tapping ${i} and ${j}: ${JSON.stringify(state)}`);
+    }
     await keep.click();
   }
 }

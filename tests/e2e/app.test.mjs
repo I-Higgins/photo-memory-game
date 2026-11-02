@@ -118,6 +118,13 @@ for (const { name, type } of browsers) {
         await page.evaluate(async () => { await navigator.serviceWorker.ready; });
         await page.reload();
         await page.waitForFunction(() => !!navigator.serviceWorker.controller, null, { timeout: 15000 });
+        const cached = await page.evaluate(async () => {
+          const keys = await caches.keys();
+          const c = await caches.open(keys[0]);
+          return { keys, count: (await c.keys()).length, controlled: !!navigator.serviceWorker.controller };
+        });
+        assert.ok(cached.controlled, 'page is controlled by the service worker');
+        assert.ok(cached.count >= 80, `precache has ${cached.count} entries (${cached.keys})`);
         await context.setOffline(true);
         await page.goto(srv.url + '#/');
         await page.getByRole('heading', { name: 'Pick an album to play' }).waitFor();

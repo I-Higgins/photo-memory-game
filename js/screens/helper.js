@@ -458,6 +458,7 @@ export async function renderHelperAlbum(root, nav, albumId) {
         await db.putPhoto(photo);
       } catch (e) {
         if (isQuotaError(e)) { full = true; break; }
+        console.warn('Photo not saved:', files[i].name, e && e.name, e && e.message); // eslint-disable-line no-console
         unreadable++;
         pendings[i].remove();
         continue;
