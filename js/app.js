@@ -77,6 +77,9 @@ function titleFor(parts) {
 
 applySettings();
 watchSystem(() => {});
+// No pinch or double-tap zoom: the viewport tag covers most of it; Safari also needs this.
+document.addEventListener('gesturestart', (e) => e.preventDefault());
+document.addEventListener('dblclick', (e) => e.preventDefault(), { passive: false });
 // Reopening the app carries on with an unfinished round.
 if ((!location.hash || location.hash === '#/' || location.hash === '#') && hasResumableRound()) {
   history.replaceState(null, '', '#/game');
